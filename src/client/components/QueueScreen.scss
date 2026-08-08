@@ -77,6 +77,13 @@
   font-weight: 600;
 }
 
+// The outcome is the card's headline verdict; wrapping it to two lines turns a
+// scannable list into a ragged one.
+.queue-outcome {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
 .queue-service {
   font-size: 0.9375rem;
 }

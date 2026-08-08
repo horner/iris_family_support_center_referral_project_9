@@ -17,6 +17,30 @@ const noHorizontalOverflow = async (page: Page): Promise<boolean> =>
 /** `/` is the welcome page; the supervisor's work starts one route in. */
 const QUEUE = "/#/queue";
 
+/**
+ * The queue is a card list on a phone and a DataVis grid on a laptop, so the
+ * journey tests ask for "a referral" rather than for one layout's markup.
+ */
+const entries = (page: Page) =>
+  page.locator(".queue-table").isVisible().then((grid) =>
+    grid ? page.locator(".queue-table tbody tr") : page.locator(".queue-card"),
+  );
+
+const pinned = ":is(.queue-pinned, .queue-table-pinned)";
+
+const openReferral = async (page: Page, select: "first" | "unpinned" | "matched"): Promise<void> => {
+  const rows = await entries(page);
+  const unpinned = rows.filter({ hasNot: page.locator(pinned) });
+  const target =
+    select === "first"
+      ? rows.first()
+      : select === "unpinned"
+        ? unpinned.first()
+        : unpinned.filter({ hasText: "Match" }).first();
+  await expect(target).toBeVisible();
+  await target.click();
+};
+
 test("supervisor can sync, open a case and assign", async ({ page }) => {
   await page.goto(QUEUE);
 
@@ -30,9 +54,7 @@ test("supervisor can sync, open a case and assign", async ({ page }) => {
 
   // Take a case the planner could actually staff — the assign path is the one
   // under test, and a staffing gap would never reach it.
-  const matched = page.locator(".queue-card:has-text('Match'):not(:has(.queue-pinned))").first();
-  await expect(matched).toBeVisible();
-  await matched.click();
+  await openReferral(page, "matched");
 
   // Recommend is the phone default, and the reasoning is on screen with it.
   await expect(page.getByRole("heading", { name: /Recommended worker/i })).toBeVisible();
@@ -61,7 +83,7 @@ test("supervisor can sync, open a case and assign", async ({ page }) => {
 
   // Back in the queue the case is pinned, because a commitment is not a plan.
   await page.getByRole("button", { name: /Back to the queue/i }).click();
-  await expect(page.locator(".queue-pinned").first()).toBeVisible();
+  await expect(page.locator(pinned).first()).toBeVisible();
 
   expect(await noHorizontalOverflow(page)).toBe(false);
 });
@@ -72,7 +94,7 @@ test("declining captures a tappable reason", async ({ page }) => {
   await expect(page.locator(".queue-count")).toBeVisible({ timeout: 30_000 });
 
   // Skip anything already committed — those cases have no action bar left.
-  await page.locator(".queue-card:not(:has(.queue-pinned))").first().click();
+  await openReferral(page, "unpinned");
   await page.getByRole("button", { name: "Decline", exact: true }).click();
 
   // A bottom sheet, with reasons as taps rather than a text box to type into.
@@ -95,8 +117,8 @@ test("a note typed on one device appears on the other", async ({ page, context }
   await page.getByRole("button", { name: /Sync mail/i }).click();
   await expect(page.locator(".queue-count")).toBeVisible({ timeout: 30_000 });
 
-  const first = page.locator(".queue-card").first();
-  const caseId = ((await first.getAttribute("aria-label")) ?? "").replace(/^Open /, "");
+  const first = (await entries(page)).first();
+  const caseId = ((await first.innerText()).match(/R\d+/) ?? [""])[0];
   await first.click();
   await expect(page.getByRole("heading", { name: /Shared notes/i })).toBeVisible();
 
@@ -104,7 +126,7 @@ test("a note typed on one device appears on the other", async ({ page, context }
   // phone is in a car park.
   const other = await context.newPage();
   await other.goto(QUEUE);
-  await other.locator(`.queue-card[aria-label="Open ${caseId}"]`).click();
+  await (await entries(other)).filter({ hasText: caseId }).first().click();
   await expect(other.getByRole("heading", { name: /Shared notes/i })).toBeVisible();
 
   const note = `Called the FCM at ${Date.now()}`;
@@ -141,7 +163,7 @@ test("back walks out of a case tab by tab", async ({ page }) => {
   await page.getByRole("button", { name: /Sync mail/i }).click();
   await expect(page.locator(".queue-count")).toBeVisible({ timeout: 30_000 });
 
-  await page.locator(".queue-card").first().click();
+  await openReferral(page, "first");
   await expect(page).toHaveURL(/#\/case\/.+\/recommend$/);
 
   await page.getByRole("button", { name: "Explore", exact: true }).click();
@@ -166,7 +188,7 @@ for (const width of [375, 768, 1280]) {
 
     expect(await noHorizontalOverflow(page)).toBe(false);
 
-    await page.locator(".queue-card").first().click();
+    await openReferral(page, "first");
     await expect(page.getByRole("heading", { name: /Recommended worker/i })).toBeVisible();
     expect(await noHorizontalOverflow(page)).toBe(false);
   });
@@ -177,7 +199,7 @@ test("every tappable target clears 44px", async ({ page }) => {
   await page.goto(QUEUE);
   await page.getByRole("button", { name: /Sync mail/i }).click();
   await expect(page.locator(".queue-count")).toBeVisible({ timeout: 30_000 });
-  await page.locator(".queue-card").first().click();
+  await openReferral(page, "first");
   await expect(page.getByRole("heading", { name: /Recommended worker/i })).toBeVisible();
 
   // WCAG 2.5.5. A 32px button is a mis-tap waiting to happen in a car park

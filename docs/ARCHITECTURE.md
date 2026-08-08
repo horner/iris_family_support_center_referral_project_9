@@ -165,7 +165,7 @@ offline-capable. The single act that spends a scarce slot is server-authoritativ
         ├── App.tsx           shell: locale, connection state, route switch
         ├── i18n.ts           every user-facing string, English + Spanish
         ├── api.ts            typed fetch wrappers (a 409 is data, not an error)
-        ├── hooks/            useHashRoute, useQueue, useCaseDoc, useOnline
+        ├── hooks/            useHashRoute, useQueue, useCaseDoc, useOnline, useMediaQuery
         └── components/       one .tsx and one .scss per screen
 ```
 
@@ -335,7 +335,7 @@ the same `Plan` and `Evaluation` objects and differ only in presentation density
 
 | Mode | Question | Phone | Desktop |
 |---|---|---|---|
-| **Plan** | "How do we staff everything pending?" | Deadline-sorted card list with a contention chip | Full table plus contention panel |
+| **Plan** | "How do we staff everything pending?" | Deadline-sorted card list with a contention chip | DataVis grid — filter, sort, export — plus contention panel |
 | **Recommend** | "Who should take this one?" | Primary screen: recommendation, rationale, unknowns, thumb-reachable action bar | Side by side with the case sheet |
 | **Explore** | "Why not her? What if I relax this?" | Stacked candidate cards with gate chips | 38-row sortable table |
 
@@ -352,6 +352,19 @@ with a 38-row table wedged into a phone.
 Touch targets meet WCAG 2.5.5 (44×44px), actions sit in a sticky bottom bar, reasons open as
 bottom sheets, and decline reasons are a tappable category list rather than free text —
 typing prose on a phone is how KPIs stop getting filled in.
+
+The queue is the one screen with two genuinely different layouts rather than one responsive
+one. Below 60rem it is the deadline-sorted card list with a search box and three selects;
+at 60rem and above it is a `@mieweb/datavis` `DataGrid`, which brings per-column filter
+dropdowns, multi-column sort, column resize and CSV export for free. A supervisor at a desk
+wants to slice thirty referrals by county; a supervisor in a parking lot wants to tap the
+top one. `useMediaQuery` picks between them, and the shared filter/sort logic the card list
+uses lives in `src/client/queue-view.ts`.
+
+`datavis-ace`'s `LocalSource` reads its rows from a global rather than from props, so
+`QueueTable` publishes `window.__irisQueueRows` and constructs the `Source`/`ComputedView`
+pair in the same memo — the source deep-copies at construction, so publishing has to happen
+first and the pipeline has to be rebuilt whenever the rows change.
 
 ### Sync and offline
 

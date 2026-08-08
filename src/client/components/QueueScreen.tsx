@@ -1,32 +1,34 @@
 /**
  * Plan mode — "how do we staff everything that's pending?"
  *
- * On a phone this is a card list sorted by deadline urgency, so the
- * most-at-risk referral is the first thing a thumb reaches. The same data
- * becomes a table at tablet width and up; it is never a 30-row table squeezed
- * onto a 375px screen.
+ * On a phone this is a card list, deadline-sorted, so the most-at-risk referral
+ * is the first thing a thumb reaches. At desktop width the same filtered and
+ * sorted rows become a DataVis table. It is never a 30-row table squeezed onto
+ * a 375px screen.
  */
+import { useMemo, useState } from "react";
 import { Badge, Button } from "@mieweb/ui";
 
-import { APP_CONFIG, responseDeadline } from "../../config.ts";
 import type { Plan } from "../../model.ts";
 import type { QueueRow } from "../api.ts";
 import { formatDate, useI18n, type MessageKey } from "../i18n.ts";
+import { useMediaQuery } from "../hooks/useMediaQuery.ts";
+import {
+  deadlineOf,
+  EMPTY_FILTER,
+  filterAndSort,
+  uniqueValues,
+  type QueueFilter,
+  type QueueSort,
+} from "../queue-view.ts";
 import { ContentionBanner } from "./ContentionBanner.tsx";
+import { outcomeVariant } from "./outcome.ts";
+import { QueueFilters } from "./QueueFilters.tsx";
+import { QueueTable } from "./QueueTable.tsx";
 import { UnknownsBox } from "./UnknownsBox.tsx";
 import "./QueueScreen.scss";
 
 const DAY = 24 * 60 * 60 * 1000;
-
-const outcomeVariant = (outcome: string | null): "success" | "warning" | "danger" | "secondary" => {
-  if (outcome === "match") return "success";
-  if (outcome === "no_capacity") return "warning";
-  if (outcome === "no_eligible_staff") return "danger";
-  return "secondary";
-};
-
-const deadlineOf = (row: QueueRow): Date =>
-  responseDeadline(new Date(row.receivedAt ?? Date.now()), APP_CONFIG.responseDeadline);
 
 export interface QueueScreenProps {
   rows: QueueRow[];
@@ -46,16 +48,24 @@ export function QueueScreen({
   onReplan,
 }: QueueScreenProps): React.ReactElement {
   const { t, locale } = useI18n();
+  const [filter, setFilter] = useState<QueueFilter>(EMPTY_FILTER);
+  const [sort, setSort] = useState<QueueSort>({ field: "deadline", direction: "asc" });
 
-  // Most-at-risk first: the deadline drives the order, not the arrival time.
-  const sorted = [...rows].sort((a, b) => deadlineOf(a).getTime() - deadlineOf(b).getTime());
+  // Below this the table stops being readable and the cards take over.
+  const wide = useMediaQuery("(min-width: 60rem)");
+
+  const visible = useMemo(() => filterAndSort(rows, filter, sort), [rows, filter, sort]);
+  const services = useMemo(() => uniqueValues(rows, "service"), [rows]);
+  const outcomes = useMemo(() => uniqueValues(rows, "outcome"), [rows]);
 
   return (
     <div className="queue-screen">
       <header className="queue-header">
         <h1 className="queue-heading">{t("queue.heading")}</h1>
         <p className="queue-count" aria-live="polite">
-          {t("queue.count", { count: rows.length })}
+          {visible.length === rows.length
+            ? t("queue.count", { count: rows.length })
+            : t("queue.countFiltered", { count: visible.length, total: rows.length })}
         </p>
         <div className="queue-actions">
           <Button onClick={onSync} disabled={busy} variant="secondary" size="sm">
@@ -69,11 +79,26 @@ export function QueueScreen({
 
       <ContentionBanner contention={plan?.contention ?? []} />
 
-      {sorted.length === 0 ? (
-        <p className="queue-empty">{t("queue.empty")}</p>
+      {wide ? (
+        <QueueTable onOpen={onOpen} rows={rows} />
       ) : (
-        <ul className="queue-list">
-          {sorted.map((row) => {
+        <>
+          <QueueFilters
+            filter={filter}
+            onFilterChange={setFilter}
+            onSortChange={setSort}
+            outcomes={outcomes}
+            services={services}
+            sort={sort}
+          />
+
+          {visible.length === 0 ? (
+            <p className="queue-empty">
+              {rows.length === 0 ? t("queue.empty") : t("filter.none")}
+            </p>
+          ) : (
+            <ul className="queue-list">
+              {visible.map((row) => {
             const deadline = deadlineOf(row);
             const days = Math.ceil((deadline.getTime() - Date.now()) / DAY);
             const urgency = days < 0 ? "overdue" : days === 0 ? "today" : days <= 1 ? "soon" : "ok";
@@ -89,7 +114,7 @@ export function QueueScreen({
                 >
                   <span className="queue-card-top">
                     <span className="queue-referral">{row.referralId ?? "—"}</span>
-                    <Badge variant={outcomeVariant(row.outcome)} size="sm">
+                    <Badge className="queue-outcome" variant={outcomeVariant(row.outcome)} size="sm">
                       {t(`outcome.${row.outcome ?? "no_capacity"}` as MessageKey)}
                     </Badge>
                   </span>
@@ -122,8 +147,10 @@ export function QueueScreen({
                 </button>
               </li>
             );
-          })}
-        </ul>
+              })}
+            </ul>
+          )}
+        </>
       )}
 
       <UnknownsBox unknowns={plan?.unknowns ?? []} />
