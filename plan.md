@@ -61,10 +61,10 @@ Rules for the junior dev:
 ### Milestone 1 — Email seeding into Mailpit
 > Commit: `M1: seed script delivers referral emails into mailpit`
 
-- [ ] Write `scripts/seed-mailpit.ts`: read `referral_emails.json`, send each as a real email over SMTP to `localhost:1025` (use `nodemailer`). Preserve `from`, `to`, `subject`, `body`, `message_id`, and set the `Date` header from `received_at`.
-- [ ] `npm run seed` script.
-- [ ] Verify: all 30 messages visible in the Mailpit UI.
-- [ ] Test: seed script is idempotent-friendly (document that re-seeding duplicates; add `npm run seed:fresh` that calls Mailpit's delete-all API first).
+- [x] Write `scripts/seed-mailpit.ts`: read `referral_emails.json`, send each as a real email over SMTP to `localhost:1025` (use `nodemailer`). Preserve `from`, `to`, `subject`, `body`, `message_id`, and set the `Date` header from `received_at`.
+- [x] `npm run seed` script.
+- [x] Verify: all 30 messages visible in the Mailpit UI.
+- [x] Test: seed script is idempotent-friendly (document that re-seeding duplicates; add `npm run seed:fresh` that calls Mailpit's delete-all API first). *(Covered by the M2 ingest dedupe test.)*
 
 ### Milestone 2 — Ingest + parser
 > Commit: `M2: mailpit ingest and referral parser with tests`
