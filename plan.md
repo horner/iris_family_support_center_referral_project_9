@@ -216,26 +216,26 @@ Still pure functions, no I/O.
 ### Milestone 6 — Pipeline + YORM service
 > Commit: `M6: end-to-end pipeline — mailpit to collaborative case docs with SQL projections`
 
-- [ ] `src/server.ts` — Hono app: `createYorm({ runtime: memoryRuntime(), documents/projections: drizzle stores, mappings: [caseMapping] })`, mounted at `/yorm` (REST + Yjs WebSocket).
-- [ ] `src/pipeline.ts`: ingest → parse → evaluate → **plan the whole pending set** → create/update each case Y.Doc (`Case/<message_id>`); YORM projection populates `cases` + `case_decisions`. Dedupe on `message_id` so re-syncing is safe.
-- [ ] Hono REST endpoints:
-  - [ ] `POST /api/sync` — pull new mail from Mailpit and run the pipeline
-  - [ ] `GET /api/queue` — SQL over the `cases` projection (join `case_decisions`, `staff`)
-  - [ ] `GET /api/plan` — the current whole-queue `Plan`, including contention
-  - [ ] `POST /api/replan` — recompute the plan for all uncommitted cases
-  - [ ] `POST /api/plan/scenario` — replan with hypothetical pins and return the result **without persisting anything**; this is what powers "what if" in the UI
-  - [ ] `GET /api/kpi` — declines per week by service line, SQL `GROUP BY` over the `cases` projection (Whitney's KPI, feeds project 10)
-- [ ] **Proposals are Yjs transactions** on the case doc: the planner's suggestion, supervisor overrides of it, scenario notes, and free-text notes. They merge, work offline, and consume nothing.
-- [ ] **Commitment is the API, and only the API** — `POST /api/assignments` and `POST /api/declines`:
-  - [ ] The server, inside **one SQL transaction**, re-checks every gate against *current* data and increments `current_families_assigned` only if `current_families_assigned < max_families_dcs`. A stale client cannot talk it into an over-cap assignment
-  - [ ] Rejects with a specific, actionable reason — `slot_taken` (naming who took it), `gate_failed` (naming the gate), `already_committed` — never a bare 409
-  - [ ] Takes a client-generated **idempotency key**, so a retry on a flaky phone connection cannot double-commit. Same key, same result, capacity consumed once
-  - [ ] On success the server writes the commitment back into the case Y.Doc, so every connected supervisor sees it land live — the API is the writer of truth, the doc is the broadcast channel
-  - [ ] Committing triggers a replan of the remaining uncommitted queue so freed or consumed slots are reallocated immediately
-  - [ ] Clients never write the commitment block themselves; the projection is derived from the server-written fields
-- [ ] Integration test (in-memory SQLite): seed → sync → 30 case rows with a coherent plan; commit a contended case → the losing referral replans onto its next-best worker (or reports the honest gap); re-sync creates no duplicates.
-- [ ] Concurrency test: two clients commit the same last slot simultaneously → exactly one succeeds, the other gets `slot_taken` naming the winner, and `current_families_assigned` never exceeds `max_families_dcs`.
-- [ ] Idempotency test: the same commit key sent twice consumes one slot and returns the same result both times.
+- [x] `src/server.ts` — Hono app: `createYorm({ runtime: memoryRuntime(), documents/projections: drizzle stores, mappings: [caseMapping] })`, mounted at `/yorm` (REST + Yjs WebSocket).
+- [x] `src/pipeline.ts`: ingest → parse → evaluate → **plan the whole pending set** → create/update each case Y.Doc (`Case/<message_id>`); YORM projection populates `cases` + `case_decisions`. Dedupe on `message_id` so re-syncing is safe.
+- [x] Hono REST endpoints:
+  - [x] `POST /api/sync` — pull new mail from Mailpit and run the pipeline
+  - [x] `GET /api/queue` — SQL over the `cases` projection (join `case_decisions`, `staff`)
+  - [x] `GET /api/plan` — the current whole-queue `Plan`, including contention
+  - [x] `POST /api/replan` — recompute the plan for all uncommitted cases
+  - [x] `POST /api/plan/scenario` — replan with hypothetical pins and return the result **without persisting anything**; this is what powers "what if" in the UI
+  - [x] `GET /api/kpi` — declines per week by service line, SQL `GROUP BY` over the `cases` projection (Whitney's KPI, feeds project 10)
+- [x] **Proposals are Yjs transactions** on the case doc: the planner's suggestion, supervisor overrides of it, scenario notes, and free-text notes. They merge, work offline, and consume nothing.
+- [x] **Commitment is the API, and only the API** — `POST /api/assignments` and `POST /api/declines` *(the transaction lives in `src/commit.ts`; the authoritative record is the `commitments` table, because a CRDT gives convergence, not invariants)*:
+  - [x] The server, inside **one SQL transaction**, re-checks every gate against *current* data and increments `current_families_assigned` only if `current_families_assigned < max_families_dcs`. A stale client cannot talk it into an over-cap assignment
+  - [x] Rejects with a specific, actionable reason — `slot_taken` (naming who took it), `gate_failed` (naming the gate), `already_committed` — never a bare 409
+  - [x] Takes a client-generated **idempotency key**, so a retry on a flaky phone connection cannot double-commit. Same key, same result, capacity consumed once
+  - [x] On success the server writes the commitment back into the case Y.Doc, so every connected supervisor sees it land live — the API is the writer of truth, the doc is the broadcast channel
+  - [x] Committing triggers a replan of the remaining uncommitted queue so freed or consumed slots are reallocated immediately
+  - [x] Clients never write the commitment block themselves; the projection is derived from the server-written fields
+- [x] Integration test (in-memory SQLite): seed → sync → 30 case rows with a coherent plan; commit a contended case → the losing referral replans onto its next-best worker (or reports the honest gap); re-sync creates no duplicates.
+- [x] Concurrency test: two clients commit the same last slot simultaneously → exactly one succeeds, the other gets `slot_taken` naming the winner, and `current_families_assigned` never exceeds `max_families_dcs`.
+- [x] Idempotency test: the same commit key sent twice consumes one slot and returns the same result both times.
 
 ### Milestone 7 — Supervisor UI (mobile-first, collaborative, three planning modes)
 > Commit: `M7: mobile-first supervisor screens — plan, recommend and explore modes, esheet case sheet, live collab`

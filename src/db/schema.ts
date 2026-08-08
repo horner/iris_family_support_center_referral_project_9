@@ -71,7 +71,32 @@ export const caseDecisions = sqliteTable("case_decisions", {
   }).notNull(),
 });
 
+/**
+ * The **authoritative** record of every commitment — written directly by the
+ * assignment API inside the same transaction that consumes the slot, not
+ * derived from a document.
+ *
+ * A CRDT gives convergence, not invariants: two offline commits of the same
+ * last slot would merge cleanly straight through the 12-family cap. So the
+ * uniqueness that protects the cap lives here, in SQL:
+ * - `commit_key` is the primary key, so a retry from a flaky phone is a no-op
+ * - `message_id` is unique, so a case cannot be committed twice
+ *
+ * `cases.committed_*` mirrors this for reporting; this table decides.
+ */
+export const commitments = sqliteTable("commitments", {
+  commitKey: text("commit_key").primaryKey(),
+  messageId: text("message_id").notNull().unique(),
+  /** `assigned | declined` */
+  status: text("status").notNull(),
+  staffId: text("staff_id").references(() => staff.staffId),
+  declineReason: text("decline_reason"),
+  committedBy: text("committed_by").notNull(),
+  committedAt: text("committed_at").notNull(),
+});
+
 export type StaffRow = typeof staff.$inferSelect;
 export type ServiceRow = typeof services.$inferSelect;
 export type CaseRow = typeof cases.$inferSelect;
 export type CaseDecisionRow = typeof caseDecisions.$inferSelect;
+export type CommitmentRow = typeof commitments.$inferSelect;

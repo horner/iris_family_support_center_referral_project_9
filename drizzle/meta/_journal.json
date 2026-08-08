@@ -8,6 +8,13 @@
       "when": 1786209700895,
       "tag": "0000_amusing_daredevil",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1786210435829,
+      "tag": "0001_light_stone_men",
+      "breakpoints": true
     }
   ]
 }
