@@ -84,20 +84,20 @@ Rules for the junior dev:
 ### Milestone 3 — Database schema, YORM mapping + data loaders
 > Commit: `M3: drizzle schema, yorm case mapping, roster and service matrix loaders with tests`
 
-- [ ] `src/db/schema.ts` — Drizzle tables:
+- [x] `src/db/schema.ts` — Drizzle tables:
   - **Reference (plain Drizzle, no CRDT):** `staff` (mirrors `staff_roster.csv`; `counties_served`, `languages`, `availability` as JSON columns; `active` as boolean) and `services` (service, minimum education set, eligible role set — JSON columns)
   - **YORM projections (owned by the case mapping):** `cases` (message_id unique, parsed fields, status `pending|proposed|assigned|declined|needs_re_decision`, proposed staff FK, **committed** staff FK, committedBy/committedAt, decline reason, `commit_key` for idempotent retries), `case_decisions` (outcome, proposed staff FK, runners-up JSON, rationale JSON, `contended_with` JSON, unknowns JSON, `requiresSupervisorJudgment`)
   - **Status is the propose/commit boundary.** `pending` and `proposed` consume nothing and may be replanned at will; `assigned` and `declined` are server-confirmed, pin the case, and are the only states that count in the KPI.
-- [ ] `src/case-doc.ts` — the canonical **case document** shape (one Y.Doc per referral): parsed referral + proposal + scenarios + supervisor notes (all CRDT-owned), plus a **server-owned commitment block** the client never writes directly. Define the eSheet form definition for it in `src/case-sheet.ts` so the renderer and the doc share field names.
-- [ ] `src/db/mapping.ts` — YORM `defineMapping('iris.Case', v1)`: project the case doc into `cases` + `case_decisions` (forward-only; `one(...)` + `many(...)`, stable keys from `message_id`).
-- [ ] `src/db/index.ts` — the only file that touches `better-sqlite3`; exports the Drizzle `db`. Use `drizzle-kit push` for schema sync.
-- [ ] `src/db/import.ts`: import `staff_roster.csv` and `service_role_matrix.csv` (split `|` lists; parse `eligible_roles` on " or " into a role **set**; same for education). `npm run db:import`.
-- [ ] Tests (in-memory SQLite — pass `:memory:` to the same factory):
-  - [ ] 38 staff load; S001 is inactive; S006 has 13 of 12 families (over cap — real data, keep it)
-  - [ ] Family Preservation and FCT each yield **two** eligible roles
-  - [ ] Education parsing handles `HS Diploma/GED or BA` and `Master's or BA`
-  - [ ] Re-running the import is idempotent (upsert on staff_id / service name)
-  - [ ] Mapping golden test: a sample case doc → expected `cases` + `case_decisions` rows; second projection is idempotent
+- [x] `src/case-doc.ts` — the canonical **case document** shape (one Y.Doc per referral): parsed referral + proposal + scenarios + supervisor notes (all CRDT-owned), plus a **server-owned commitment block** the client never writes directly. Define the eSheet form definition for it in `src/case-sheet.ts` so the renderer and the doc share field names.
+- [x] `src/db/mapping.ts` — YORM `defineMapping('iris.Case', v1)`: project the case doc into `cases` + `case_decisions` (forward-only; `one(...)` + `many(...)`, stable keys from `message_id`).
+- [x] `src/db/index.ts` — the only file that touches `better-sqlite3`; exports the Drizzle `db`. Use `drizzle-kit push` for schema sync. *(Uses generated `drizzle/` migrations instead of `push`, so `:memory:` test databases get the same schema from the same source.)*
+- [x] `src/db/import.ts`: import `staff_roster.csv` and `service_role_matrix.csv` (split `|` lists; parse `eligible_roles` on " or " into a role **set**; same for education). `npm run db:import`. *(CSV → typed objects lives in `src/reference-data.ts` so the engine tests need no database.)*
+- [x] Tests (in-memory SQLite — pass `:memory:` to the same factory):
+  - [x] 38 staff load; S001 is inactive; S006 has 13 of 12 families (over cap — real data, keep it)
+  - [x] Family Preservation and FCT each yield **two** eligible roles
+  - [x] Education parsing handles `HS Diploma/GED or BA` and `Master's or BA`
+  - [x] Re-running the import is idempotent (upsert on staff_id / service name)
+  - [x] Mapping golden test: a sample case doc → expected `cases` + `case_decisions` rows; second projection is idempotent
 
 ### Milestone 4 — Candidate evaluation
 > Commit: `M4: candidate evaluation — gates, scoring, fairness policy, honest gaps`

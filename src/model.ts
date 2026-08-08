@@ -97,3 +97,72 @@ export const JUDGMENT_CALL_SERVICES: readonly string[] = [
 export const HOURS_UNKNOWN =
   "The 20-hour face-to-face capacity rule could not be applied: CaseWind reports " +
   "case counts, not direct service hours. The 12-family DCS cap is the only measurable gate.";
+
+// ---------------------------------------------------------------------------
+// Engine output — evaluation of every staff member for one referral
+// ---------------------------------------------------------------------------
+
+export type GateName = "active" | "role" | "county" | "capacity";
+
+/** `detail` is the rationale the UI shows — one string serves decision and explanation. */
+export interface GateResult {
+  pass: boolean;
+  detail: string;
+}
+
+export interface CandidateScore {
+  language: number;
+  availability: number;
+  fairness: number;
+  total: number;
+}
+
+export interface CandidateEvaluation {
+  staffId: string;
+  staffName: string;
+  gates: Record<GateName, GateResult>;
+  eligible: boolean;
+  blockedBy: GateName[];
+  /** Only meaningful when `eligible`. */
+  score: CandidateScore;
+}
+
+export interface Evaluation {
+  referral: Referral;
+  /** Every staff member, ranked. Nobody is dropped — "why not her?" must have an answer. */
+  candidates: CandidateEvaluation[];
+  unknowns: string[];
+  requiresSupervisorJudgment: boolean;
+}
+
+// ---------------------------------------------------------------------------
+// Planner output — allocation across the whole pending queue
+// ---------------------------------------------------------------------------
+
+export type AllocationOutcome = "match" | "no_capacity" | "no_eligible_staff";
+
+export interface Allocation {
+  referralId: string;
+  assignedStaffId?: string;
+  outcome: AllocationOutcome;
+  /** Supervisor-decided (committed): the planner must not move it. */
+  pinned: boolean;
+  /** Other referrals that wanted the same person. */
+  contendedWith: string[];
+  rationale: string[];
+  runnersUp: { staffId: string; reason: string }[];
+  requiresSupervisorJudgment: boolean;
+}
+
+export interface Contention {
+  staffId: string;
+  slots: number;
+  wantedBy: string[];
+}
+
+export interface Plan {
+  allocations: Allocation[];
+  contention: Contention[];
+  unassigned: Allocation[];
+  unknowns: string[];
+}
