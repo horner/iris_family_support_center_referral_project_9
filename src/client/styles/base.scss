@@ -1,0 +1,49 @@
+// Mobile-first base: phone layout at the top level, `min-width` queries only.
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family:
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    sans-serif;
+  // 16px minimum stops iOS auto-zooming when a text field is focused.
+  font-size: 16px;
+  line-height: 1.45;
+  color: var(--mieweb-text, #10233c);
+  background: var(--mieweb-surface-muted, #f4f6fa);
+}
+
+input,
+select,
+textarea,
+button {
+  font: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid var(--mieweb-primary-500, #2f6feb);
+  outline-offset: 2px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}

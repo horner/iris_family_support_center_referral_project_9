@@ -1,0 +1,9 @@
+# The app itself is the root package; YORM has no npm release, so its packages
+# are consumed straight from the vendored submodule (see docs/ARCHITECTURE.md).
+packages:
+  - "."
+  - "vendor/yorm/packages/*"
+
+onlyBuiltDependencies:
+  - better-sqlite3
+  - esbuild

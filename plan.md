@@ -45,18 +45,18 @@ Rules for the junior dev:
 ### Milestone 0 — Scaffolding
 > Commit: `M0: project scaffolding — vite+react, vitest, mieweb ui, yorm vendored, mailpit config`
 
-- [ ] `npm create vite@latest app` (React + TypeScript). Keep data files at repo root.
-- [ ] Add `vitest` and a passing smoke test (`expect(true).toBe(true)`).
-- [ ] Add `@playwright/test` with an `iPhone 13` device project — one placeholder test now, the real assign journey in M7.
-- [ ] Add `@mieweb/ui` and import `@mieweb/ui/styles.css` in `main.tsx`. Render one `@mieweb/ui` component to prove the tokens load.
-- [ ] Confirm `index.html` has `<meta name="viewport" content="width=device-width, initial-scale=1">`, and set the app's base stylesheet up mobile-first (phone styles at the top level, `min-width` queries below).
-- [ ] Add `vite-plugin-pwa` with asset precaching and a web app manifest. Verify once now: build, load, kill the server, reload — the app must still boot. Retest at the end of M7.
-- [ ] Add `@esheet/renderer` + `@esheet/core`.
-- [ ] Vendor YORM: `git submodule add https://github.com/mieweb/yorm vendor/yorm`, build it, and link `@yorm/*` via workspace/file deps (mirror YORM's own `examples/patient-collab-demo` setup).
-- [ ] Add `hono`, `drizzle-orm`, `better-sqlite3`, `drizzle-kit` (dev). Create `drizzle.config.ts` pointing at `src/db/schema.ts` and `data/iris.db`.
-- [ ] Add `.gitignore` (node_modules, dist, data/*.db).
-- [ ] Add `npm run mailpit` script (or a `docker-compose.yml`) that starts Mailpit with SMTP on `:1025` and UI/API on `:8025`.
-- [ ] Verify: `npm run dev`, `npm test`, and Mailpit UI at http://localhost:8025 all work.
+- [x] `npm create vite@latest app` (React + TypeScript). Keep data files at repo root. *(Built at the repo root instead of an `app/` subfolder, matching the layout in `docs/ARCHITECTURE.md`; pnpm workspace, because YORM's packages use `workspace:*`.)*
+- [x] Add `vitest` and a passing smoke test (`expect(true).toBe(true)`).
+- [x] Add `@playwright/test` with an `iPhone 13` device project — one placeholder test now, the real assign journey in M7.
+- [x] Add `@mieweb/ui` and import `@mieweb/ui/styles.css` in `main.tsx`. Render one `@mieweb/ui` component to prove the tokens load.
+- [x] Confirm `index.html` has `<meta name="viewport" content="width=device-width, initial-scale=1">`, and set the app's base stylesheet up mobile-first (phone styles at the top level, `min-width` queries below).
+- [x] Add `vite-plugin-pwa` with asset precaching and a web app manifest. Verify once now: build, load, kill the server, reload — the app must still boot. Retest at the end of M7.
+- [x] Add `@esheet/renderer` + `@esheet/core`.
+- [x] Vendor YORM: `git submodule add https://github.com/mieweb/yorm vendor/yorm`, build it, and link `@yorm/*` via workspace/file deps (mirror YORM's own `examples/patient-collab-demo` setup).
+- [x] Add `hono`, `drizzle-orm`, `better-sqlite3`, `drizzle-kit` (dev). Create `drizzle.config.ts` pointing at `src/db/schema.ts` and `data/iris.db`.
+- [x] Add `.gitignore` (node_modules, dist, data/*.db).
+- [x] Add `npm run mailpit` script (or a `docker-compose.yml`) that starts Mailpit with SMTP on `:1025` and UI/API on `:8025`.
+- [x] Verify: `npm run dev`, `npm test`, and Mailpit UI at http://localhost:8025 all work.
 
 ### Milestone 1 — Email seeding into Mailpit
 > Commit: `M1: seed script delivers referral emails into mailpit`

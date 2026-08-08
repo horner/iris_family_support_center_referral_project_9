@@ -1,0 +1,16 @@
+version: "3.9"
+
+# Stands in for the Iris referrals inbox: DCS Kidtraks sends notification
+# emails and there is no inbound API (see research/).
+services:
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: iris-mailpit
+    restart: unless-stopped
+    ports:
+      - "1025:1025" # SMTP
+      - "8025:8025" # web UI + REST API
+    environment:
+      MP_MAX_MESSAGES: 5000
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1

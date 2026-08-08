@@ -1,0 +1,3 @@
+[submodule "vendor/yorm"]
+	path = vendor/yorm
+	url = https://github.com/mieweb/yorm
