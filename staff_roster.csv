@@ -1,0 +1,39 @@
+staff_id,staff_name,education,role,counties_served,max_families_dcs,current_families_assigned,languages,availability,active_flag
+S001,Casey Vasquez,HS Diploma/GED,Family Engagement Specialist 1,Kosciusko|Noble|Steuben|Wabash,12,8,English|Spanish,Weekdays|Evenings|Weekends,N
+S002,Reggie Halloran,Master's,Clinician 1,Huntington|LaGrange|Steuben,12,12,English,Weekdays,Y
+S003,Priya Thibodeaux,BA,Family Engagement Specialist 1,Wells|Whitley,12,12,English|Spanish,Weekdays|Evenings|Weekends,Y
+S004,Omar Devries,BA,Clinician II,DeKalb|Huntington|Wells,12,12,English|Spanish,Weekdays,Y
+S005,Renee Gutierrez,BA,Clinician II,Kosciusko,12,4,English,Weekdays,Y
+S006,Ibrahim Jessup,Master's,Clinician 1,Adams,12,13,English,Weekdays|Weekends,Y
+S007,Renee Ikeda,BA,Family Engagement Specialist 2,Allen|Kosciusko,12,2,English,Weekdays|Evenings,Y
+S008,Sasha Gutierrez,BA,Family Engagement Specialist 1,Allen,12,8,English,Weekdays|Evenings,Y
+S009,Andre Sandoval,Master's,Clinician 1,Huntington|Noble|Wabash,12,12,English,Weekdays,N
+S010,Imani Nunez,BA,Family Engagement Specialist 1,Huntington|Wabash|Wells,12,12,English|Spanish,Weekdays|Weekends,Y
+S011,Reggie Escobar,BA,Family Engagement Specialist 1,Huntington,12,13,English,Weekdays,Y
+S012,Marcus Fowler,Master's,Clinician II,Noble,12,3,English,Weekdays,N
+S013,Grant Chandra,Master's,Clinician 1,Allen|Whitley,12,12,English|Spanish,Weekdays|Evenings,N
+S014,Grant Dupree,Master's,Clinician 1,DeKalb|Kosciusko,12,3,English,Weekdays|Evenings|Weekends,Y
+S015,Tomas Nunez,BA,Family Engagement Specialist 1,Whitley,12,8,English,Weekdays,Y
+S016,Freya Alvarez,BA,Family Engagement Specialist 2,Allen,12,11,English|Spanish,Weekdays|Weekends,Y
+S017,Casey Lindqvist,BA,Clinician II,Adams|Allen|Kosciusko,12,5,English,Weekdays,Y
+S018,Reggie Dupree,BA,Family Engagement Specialist 1,Huntington|Whitley,12,4,English,Weekdays,Y
+S019,Dmitri Okafor,Master's,Clinician 1,Adams|Steuben,12,5,English,Weekdays,Y
+S020,Naomi Alvarez,HS Diploma/GED,Family Engagement Specialist 1,DeKalb|LaGrange|Steuben|Wabash,12,11,English,Weekdays,Y
+S021,Priya Kowalski,Master's,Clinician 1,Noble|Wabash,12,12,English,Weekdays,N
+S022,Renee Zabel,Master's,Clinician 1,DeKalb|LaGrange|Steuben|Wells,12,12,English,Weekdays|Weekends,Y
+S023,Wes Ulrich,Master's,Family Engagement Specialist 2,Allen|DeKalb|Kosciusko|Whitley,12,9,English|Arabic,Weekdays|Evenings,Y
+S024,Brett Xu,BA,Family Engagement Specialist 1,Adams|Wabash|Wells,12,12,English,Weekdays,Y
+S025,Freya Fowler,Master's,Family Engagement Specialist 2,Adams|DeKalb|Kosciusko|Whitley,12,8,English|Spanish,Weekdays,Y
+S026,Alexis Alvarez,Master's,Clinician 1,Allen|LaGrange|Wabash,12,7,English,Weekdays|Weekends,Y
+S027,Yolanda Yeager,BA,Family Engagement Specialist 2,Allen,12,12,English,Weekdays|Evenings,Y
+S028,Miles Hollis,BA,Family Engagement Specialist 1,Adams|LaGrange|Steuben|Wabash,12,5,English|Spanish,Weekdays|Evenings,Y
+S029,Mei Okafor,BA,Family Engagement Specialist 1,Huntington|LaGrange|Wells|Whitley,12,12,English|Spanish,Weekdays,Y
+S030,Hana Thibodeaux,HS Diploma/GED,Family Engagement Specialist 1,Adams|Noble,12,3,English|Spanish,Weekdays,Y
+S031,Freya Lindqvist,Master's,Clinician II,Noble|Steuben|Wabash|Wells,12,2,English,Weekdays,Y
+S032,Miles Escobar,BA,Family Engagement Specialist 1,Allen|Huntington,12,4,English,Weekdays|Weekends,Y
+S033,Sasha Dupree,Master's,Clinician 1,Allen|LaGrange|Wabash|Wells,12,9,English,Weekdays,N
+S034,Dana Devries,HS Diploma/GED,Family Engagement Specialist 1,DeKalb|Noble|Wabash|Whitley,12,13,English,Weekdays|Evenings|Weekends,Y
+S035,Bianca Ellsworth,Master's,Family Engagement Specialist 2,Adams|Wabash,12,13,English|Spanish,Weekdays|Evenings,Y
+S036,Devon Escobar,BA,Clinician II,Huntington|Kosciusko|Steuben,12,9,English,Weekdays,N
+S037,Freya Devries,BA,Clinician II,Noble|Wells|Whitley,12,7,English,Weekdays|Weekends,Y
+S038,Imani Finnegan,BA,Family Engagement Specialist 1,Huntington|Wells,12,12,English,Weekdays,Y
