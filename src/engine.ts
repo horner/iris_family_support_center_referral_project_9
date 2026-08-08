@@ -96,6 +96,17 @@ function capacityGate(person: Staff): GateResult {
       };
 }
 
+/**
+ * The fairness term, as a function of *remaining* headroom. The planner calls
+ * it with headroom that shrinks as the run allocates, so "spread the work"
+ * actually spreads it instead of piling the whole queue on the emptiest desk.
+ */
+export function fairnessScore(remaining: number, max: number, config: EngineConfig): number {
+  if (config.fairness === "off" || max <= 0) return 0;
+  const ratio = Math.max(0, remaining) / max;
+  return config.fairness === "balance-first" ? ratio * BALANCE_FIRST_WEIGHT : ratio * config.fairnessWeight;
+}
+
 function scoreCandidate(
   person: Staff,
   referral: Referral,
@@ -108,16 +119,11 @@ function scoreCandidate(
   const matched = requested.filter((slot) => person.availability.includes(slot)).length;
   const availability = matched * AVAILABILITY_WEIGHT;
 
-  const headroomRatio =
-    person.maxFamiliesDcs > 0
-      ? Math.max(0, person.maxFamiliesDcs - person.currentFamiliesAssigned) / person.maxFamiliesDcs
-      : 0;
-  const fairness =
-    config.fairness === "off"
-      ? 0
-      : config.fairness === "balance-first"
-        ? headroomRatio * BALANCE_FIRST_WEIGHT
-        : headroomRatio * config.fairnessWeight;
+  const fairness = fairnessScore(
+    person.maxFamiliesDcs - person.currentFamiliesAssigned,
+    person.maxFamiliesDcs,
+    config,
+  );
 
   return { language, availability, fairness, total: language + availability + fairness };
 }

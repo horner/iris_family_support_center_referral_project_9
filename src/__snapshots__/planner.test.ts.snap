@@ -1,0 +1,33 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`plan > matches the recorded outcome distribution across all 30 referrals 1`] = `
+{
+  "assignments": [
+    "R770003 -> S017",
+    "R770005 -> S031",
+    "R770006 -> S018",
+    "R770009 -> S028",
+    "R770010 -> S025",
+    "R770011 -> S026",
+    "R770012 -> S018",
+    "R770013 -> S026",
+    "R770014 -> S028",
+    "R770016 -> S028",
+    "R770017 -> S028",
+    "R770018 -> S028",
+    "R770019 -> S032",
+    "R770020 -> S028",
+    "R770022 -> S031",
+    "R770025 -> S032",
+  ],
+  "contendedStaff": [
+    "S020 1 slot(s), wanted by 2",
+  ],
+  "distribution": {
+    "match": 16,
+    "needs_judgment": 4,
+    "no_capacity": 3,
+    "no_eligible_staff": 7,
+  },
+}
+`;

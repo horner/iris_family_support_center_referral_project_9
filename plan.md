@@ -171,7 +171,7 @@ Still pure functions, no I/O.
 
 **Why this is core, not a stretch.** Staff capacity is **shared across referrals**. Two Whitley-county FCT referrals cannot both go to the one clinician with a single slot left. Deciding each referral in isolation — or in arrival order — hands the slot to whoever happened to email first and reports a false `no_capacity` for the other. With 30 pending referrals and multiple staff at 11/12, this is the normal case.
 
-- [ ] `src/planner.ts` — `plan(referrals[], staff[], matrix, config) => Plan`:
+- [x] `src/planner.ts` — `plan(referrals[], staff[], matrix, config) => Plan`:
   ```ts
   type Allocation = {
     referralId: string
@@ -190,26 +190,26 @@ Still pure functions, no I/O.
     unknowns: string[]
   }
   ```
-- [ ] **Capacity is a shared budget.** Track remaining headroom per staff member across the whole run — `max_families_dcs - current_families_assigned`, decremented as the planner allocates. A staff member with 2 slots can take 2 referrals, not 30.
-- [ ] **Allocation order is scarcity-first, never arrival order.** Referrals with the fewest eligible candidates are placed first; a referral with exactly one possible worker must not lose that worker to a referral with ten options. Break ties on requested start date, then referral ID (deterministic).
-- [ ] **Improvement pass.** After the first allocation, attempt pairwise swaps that raise total score without unassigning anyone. Stop at a fixed iteration cap so runs stay deterministic and fast.
-- [ ] **Pinning.** A **committed** case (`assigned` or `declined`) is `pinned` — the planner treats it as a fixed constraint and plans the remainder around it. Committed capacity is real capacity. Proposals are never pinned and are always free to move.
-- [ ] **Scenarios.** `plan()` takes an optional set of *hypothetical* commitments so the UI can ask "if I assign S031 here, what happens to everything else?" without touching real capacity. A scenario is just a plan run with extra pins — no separate code path, and nothing is written until the supervisor commits.
-- [ ] **Contention is reported, not silently resolved.** When two referrals want the same last slot, the loser's rationale must say *who took it and why* — not merely "no capacity". That distinction is the difference between a scheduling gap and a staffing gap in the KPI.
-- [ ] `recommend(evaluation, config) => Allocation` is exported for the single-case UI, implemented as `plan([referral], …)`. One selection code path, no duplicated ranking logic.
-- [ ] Tests (`planner.test.ts`):
-  - [ ] **Shared budget**: a staff member with 2 slots is assigned at most 2 referrals across the set
-  - [ ] **Contention surfaced**: two referrals, one eligible worker with one slot → one `match`, one `no_capacity`, and `contention` names the staff member and both referrals
-  - [ ] **Scarcity beats arrival order**: a referral with one eligible worker, arriving second, still gets that worker over a referral with many options
-  - [ ] **Scarcity beats greedy on totals**: scarcity-first assigns at least as many referrals as arrival-order greedy on the full 30-referral set
-  - [ ] **Pinning respected**: pin a committed assignment to a non-optimal worker, replan, and confirm the pin survives and the rest re-plans around it
-  - [ ] **Scenarios are free**: running a plan with hypothetical pins changes no stored state and no staff capacity
-  - [ ] **Determinism**: same inputs → identical plan, twice
-  - [ ] **Fairness interacts correctly**: under `balance-first` the set spreads across more distinct workers than under `off`
-  - [ ] **No capacity**: a service+county where every eligible person is full → `no_capacity`, and the rationale names who was eligible-but-full
-  - [ ] **No eligible staff**: a service+county nobody covers → `no_eligible_staff`, worded as a staffing gap
-  - [ ] **Judgment call**: an Insurance/Medicaid referral is allocated no worker automatically
-  - [ ] Snapshot the outcome distribution across all 30 referrals — the end-to-end regression check
+- [x] **Capacity is a shared budget.** Track remaining headroom per staff member across the whole run — `max_families_dcs - current_families_assigned`, decremented as the planner allocates. A staff member with 2 slots can take 2 referrals, not 30.
+- [x] **Allocation order is scarcity-first, never arrival order.** Referrals with the fewest eligible candidates are placed first; a referral with exactly one possible worker must not lose that worker to a referral with ten options. Break ties on requested start date, then referral ID (deterministic).
+- [x] **Improvement pass.** After the first allocation, attempt pairwise swaps that raise total score without unassigning anyone. Stop at a fixed iteration cap so runs stay deterministic and fast.
+- [x] **Pinning.** A **committed** case (`assigned` or `declined`) is `pinned` — the planner treats it as a fixed constraint and plans the remainder around it. Committed capacity is real capacity. Proposals are never pinned and are always free to move.
+- [x] **Scenarios.** `plan()` takes an optional set of *hypothetical* commitments so the UI can ask "if I assign S031 here, what happens to everything else?" without touching real capacity. A scenario is just a plan run with extra pins — no separate code path, and nothing is written until the supervisor commits.
+- [x] **Contention is reported, not silently resolved.** When two referrals want the same last slot, the loser's rationale must say *who took it and why* — not merely "no capacity". That distinction is the difference between a scheduling gap and a staffing gap in the KPI.
+- [x] `recommend(evaluation, config) => Allocation` is exported for the single-case UI, implemented as `plan([referral], …)`. One selection code path, no duplicated ranking logic. *(Signature is `recommend(referral, roster, matrix, config, pins?)` — it re-evaluates rather than taking a pre-built `Evaluation`, so there is exactly one place gates are applied.)*
+- [x] Tests (`planner.test.ts`):
+  - [x] **Shared budget**: a staff member with 2 slots is assigned at most 2 referrals across the set
+  - [x] **Contention surfaced**: two referrals, one eligible worker with one slot → one `match`, one `no_capacity`, and `contention` names the staff member and both referrals
+  - [x] **Scarcity beats arrival order**: a referral with one eligible worker, arriving second, still gets that worker over a referral with many options
+  - [x] **Scarcity beats greedy on totals**: scarcity-first assigns at least as many referrals as arrival-order greedy on the full 30-referral set
+  - [x] **Pinning respected**: pin a committed assignment to a non-optimal worker, replan, and confirm the pin survives and the rest re-plans around it
+  - [x] **Scenarios are free**: running a plan with hypothetical pins changes no stored state and no staff capacity
+  - [x] **Determinism**: same inputs → identical plan, twice
+  - [x] **Fairness interacts correctly**: under `balance-first` the set spreads across more distinct workers than under `off` *(asserted as **lower peak utilisation**, not distinct-worker count — a policy can spread across many people and still push one to the cap, and on this roster `off` does exactly that: 12/12 vs 11/12.)*
+  - [x] **No capacity**: a service+county where every eligible person is full → `no_capacity`, and the rationale names who was eligible-but-full
+  - [x] **No eligible staff**: a service+county nobody covers → `no_eligible_staff`, worded as a staffing gap
+  - [x] **Judgment call**: an Insurance/Medicaid referral is allocated no worker automatically *(outcome `needs_judgment`, candidates still listed)*
+  - [x] Snapshot the outcome distribution across all 30 referrals — the end-to-end regression check
 
 > **Upgrade path (not required Saturday).** Scarcity-first + swap improvement is a good heuristic, not a proven optimum. If time allows, replace the allocator with min-cost max-flow over the (referral → staff, capacity = headroom) bipartite graph for a true optimum. Keep the `Plan` shape identical so nothing above it changes.
 

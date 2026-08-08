@@ -139,7 +139,18 @@ export interface Evaluation {
 // Planner output — allocation across the whole pending queue
 // ---------------------------------------------------------------------------
 
-export type AllocationOutcome = "match" | "no_capacity" | "no_eligible_staff";
+/**
+ * `no_capacity` is a **scheduling** gap (qualified people exist, all full);
+ * `no_eligible_staff` is a **staffing** gap (nobody qualifies at all). Whitney
+ * reports those differently, so the planner never collapses them into one.
+ * `needs_judgment` means the planner deliberately elected nobody.
+ */
+export type AllocationOutcome =
+  | "match"
+  | "no_capacity"
+  | "no_eligible_staff"
+  | "needs_judgment"
+  | "declined";
 
 export interface Allocation {
   referralId: string;
@@ -153,6 +164,18 @@ export interface Allocation {
   runnersUp: { staffId: string; reason: string }[];
   requiresSupervisorJudgment: boolean;
 }
+
+/**
+ * A supervisor decision the planner treats as a fixed constraint. Real pins
+ * come from committed cases; the UI's "what if" mode passes hypothetical ones
+ * through the same field, so scenarios need no separate code path.
+ */
+export interface Pin {
+  referralId: string;
+  /** Absent means the case was declined: pinned, and consuming no capacity. */
+  staffId?: string;
+}
+
 
 export interface Contention {
   staffId: string;
