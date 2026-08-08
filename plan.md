@@ -106,8 +106,8 @@ This milestone is pure scoring. Pure functions, no I/O, no selection.
 
 **Design rule — evaluate, then allocate.** The engine does *not* return a winner. It returns the **complete evaluation of every staff member** for one referral, and *choosing* is Milestone 5's job. This is what keeps the UI from re-deriving engine logic client-side: every mode reads the same object.
 
-- [ ] `src/engine.ts` — `evaluate(referral, staff[], matrix, config) => Evaluation`, scoring **everyone**
-- [ ] `Evaluation` shape — one `CandidateEvaluation` per staff member, nobody dropped:
+- [x] `src/engine.ts` — `evaluate(referral, staff[], matrix, config) => Evaluation`, scoring **everyone**
+- [x] `Evaluation` shape — one `CandidateEvaluation` per staff member, nobody dropped:
   ```ts
   type CandidateEvaluation = {
     staffId: string
@@ -130,39 +130,39 @@ This milestone is pure scoring. Pure functions, no I/O, no selection.
     requiresSupervisorJudgment: boolean
   }
   ```
-- [ ] Gates (each records a human-readable `detail` string — that string *is* the rationale the UI shows):
-  - [ ] **Gate 1 — active**: `active_flag === true`
-  - [ ] **Gate 2 — role eligibility**: staff role ∈ service's eligible role set AND education meets the service minimum (education ladder: HS Diploma/GED < BA < Master's; an "or" minimum passes if any listed level is met)
-  - [ ] **Gate 3 — county**: staff serves the referral county
-  - [ ] **Gate 4 — capacity**: `current_families_assigned < max_families_dcs` (the 12-family cap)
-- [ ] **Judgment-call services** (Insurance/Medicaid Referrals, Substance Abuse Group): evaluate normally but set `requiresSupervisorJudgment: true` so the planner surfaces candidates without electing one
-- [ ] **Scoring** (see the fairness section below): language match, availability match, fairness. Ties broken deterministically (staff_id) so tests and demos are stable
-- [ ] `unknowns` **always** contains the 20-hour rule statement: face-to-face hours are not reportable from CaseWind, so the primary capacity rule could not be applied
-- [ ] The gates carry enough information for M5 to derive the outcome: passing role+county but failing capacity is a **scheduling** gap; failing role+county is a **staffing** gap. Distinguish them exactly as `approval_rules.md` describes.
+- [x] Gates (each records a human-readable `detail` string — that string *is* the rationale the UI shows):
+  - [x] **Gate 1 — active**: `active_flag === true`
+  - [x] **Gate 2 — role eligibility**: staff role ∈ service's eligible role set AND education meets the service minimum (education ladder: HS Diploma/GED < BA < Master's; an "or" minimum passes if any listed level is met)
+  - [x] **Gate 3 — county**: staff serves the referral county
+  - [x] **Gate 4 — capacity**: `current_families_assigned < max_families_dcs` (the 12-family cap)
+- [x] **Judgment-call services** (Insurance/Medicaid Referrals, Substance Abuse Group): evaluate normally but set `requiresSupervisorJudgment: true` so the planner surfaces candidates without electing one
+- [x] **Scoring** (see the fairness section below): language match, availability match, fairness. Ties broken deterministically (staff_id) so tests and demos are stable
+- [x] `unknowns` **always** contains the 20-hour rule statement: face-to-face hours are not reportable from CaseWind, so the primary capacity rule could not be applied
+- [x] The gates carry enough information for M5 to derive the outcome: passing role+county but failing capacity is a **scheduling** gap; failing role+county is a **staffing** gap. Distinguish them exactly as `approval_rules.md` describes. *(`qualifiedIgnoringCapacity()` in `engine.ts` is the seam.)*
 
 #### Fairness / load balancing — make it a named policy, not a tiebreaker
 
 Spreading work evenly is a **policy choice that conflicts with preference-matching** (the best Spanish speaker for this family may be the busiest person on the team). Burying it in a sort comparator hides that tradeoff from the supervisor. So:
 
-- [ ] `config.fairness` is an explicit strategy, default `'balance'`:
+- [x] `config.fairness` is an explicit strategy, default `'balance'`:
   - `'off'` — rank purely on preference match; ignore workload beyond the hard 12-family gate
   - `'balance'` — headroom (`max - current`) contributes to the score, so work spreads across the team
   - `'balance-first'` — headroom dominates; preferences only break ties
-- [ ] `config.fairnessWeight` tunes how much `'balance'` counts against a language/availability match.
-- [ ] The rationale must **name** the fairness contribution when it changed the ranking (e.g. "ranked above S016 on workload: 2 of 12 vs 11 of 12"), so a supervisor can see when equity beat preference and override it.
-- [ ] Test: with `fairness: 'off'` the bilingual match wins; with `'balance-first'` the emptier caseload wins — same referral, same roster, different declared policy.
+- [x] `config.fairnessWeight` tunes how much `'balance'` counts against a language/availability match.
+- [x] The rationale must **name** the fairness contribution when it changed the ranking (e.g. "ranked above S016 on workload: 2 of 12 vs 11 of 12"), so a supervisor can see when equity beat preference and override it. *(`fairnessRationale()` — the planner attaches it to the allocation.)*
+- [x] Test: with `fairness: 'off'` the bilingual match wins; with `'balance-first'` the emptier caseload wins — same referral, same roster, different declared policy.
 
 > **Scope note — one referral is the special case, not the rule.** `evaluate()` scores candidates for a *single* referral. It does **not** decide anything on its own, because the pending queue is a **set** and staff capacity is shared. Allocation across the set is Milestone 5.
 
-- [ ] Tests (`engine.test.ts`) — the scenario suite, built from the deliberate difficulties in the data:
-  - [ ] **Everyone is evaluated**: `candidates.length === 38` for every referral — nobody is silently dropped
-  - [ ] **Inactive best match**: the inactive staff member (e.g. S001, bilingual, evenings+weekends) is present in `candidates` with `blockedBy: ['active']` and `eligible: false`
-  - [ ] **At-cap exclusion**: staff with 12/12 or 13/12 appear with `blockedBy: ['capacity']` and `eligible: false`
-  - [ ] **Dual-role service**: an FCT referral marks both a Family Engagement Specialist 2 and a Clinician II eligible
-  - [ ] **Soft preference ranking**: a bilingual-request referral scores a Spanish speaker above an otherwise-equal English-only staff member — but does **not** block the English-only staff
-  - [ ] **Judgment call**: an Insurance/Medicaid referral sets `requiresSupervisorJudgment: true`
-  - [ ] **Unknowns**: every evaluation includes the 20-hour-rule unknown
-- [ ] Snapshot the eligibility counts across all 30 referrals (`scenarios.test.ts`) — the regression suite
+- [x] Tests (`engine.test.ts`) — the scenario suite, built from the deliberate difficulties in the data:
+  - [x] **Everyone is evaluated**: `candidates.length === 38` for every referral — nobody is silently dropped
+  - [x] **Inactive best match**: the inactive staff member (e.g. S001, bilingual, evenings+weekends) is present in `candidates` with `blockedBy: ['active']` and `eligible: false`
+  - [x] **At-cap exclusion**: staff with 12/12 or 13/12 appear with `blockedBy: ['capacity']` and `eligible: false`
+  - [x] **Dual-role service**: an FCT referral marks both a Family Engagement Specialist 2 and a Clinician II eligible
+  - [x] **Soft preference ranking**: a bilingual-request referral scores a Spanish speaker above an otherwise-equal English-only staff member — but does **not** block the English-only staff
+  - [x] **Judgment call**: an Insurance/Medicaid referral sets `requiresSupervisorJudgment: true`
+  - [x] **Unknowns**: every evaluation includes the 20-hour-rule unknown
+- [x] Snapshot the eligibility counts across all 30 referrals (`scenarios.test.ts`) — the regression suite
 
 ### Milestone 5 — Set planning (allocation across the whole queue)
 > Commit: `M5: set planner — contention detection, scarcity-first allocation, pinning and replan`
