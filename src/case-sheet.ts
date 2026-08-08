@@ -5,7 +5,7 @@
  * case document share one vocabulary, so nothing has to translate between a
  * form response and the doc.
  */
-import type { FormDefinition } from "@esheet/core";
+import type { FormDefinition, FormResponse } from "@esheet/core";
 
 import type { CaseDoc } from "./case-doc.ts";
 
@@ -41,22 +41,32 @@ export const CASE_SHEET: FormDefinition = {
   ],
 };
 
-/** Case document → eSheet responses. Same names both sides, so this stays a projection. */
-export function caseSheetResponses(doc: CaseDoc): Record<string, unknown> {
+/**
+ * Case document → eSheet responses. Same field names both sides, so this stays
+ * a projection rather than a translation layer.
+ *
+ * `outcomeLabel` lets the client hand in the translated wording; without it the
+ * raw enum would leak onto a supervisor's screen.
+ */
+export function caseSheetResponses(doc: CaseDoc, outcomeLabel?: string): FormResponse {
   const { referral } = doc;
-  return {
+  const answers: Record<string, string> = {
     caseNumber: referral.caseNumber ?? "",
     referralId: referral.referralId ?? "",
     service: referral.service ?? "",
     county: referral.county ?? "",
     region: referral.region ?? "",
     requestedStartDate: referral.requestedStartDate ?? "",
-    childrenInHome: referral.childrenInHome ?? "",
+    childrenInHome: referral.childrenInHome === undefined ? "" : String(referral.childrenInHome),
     fcmName: referral.fcmName ?? "",
     fcmPhone: referral.fcmPhone ?? "",
     proposedStaffId: doc.commitment?.staffId ?? doc.proposal.staffId ?? "",
-    outcome: doc.proposal.outcome,
+    outcome: outcomeLabel ?? doc.proposal.outcome,
     notes: referral.notes ?? "",
     supervisorNotes: doc.notes.map((note) => `${note.author}: ${note.text}`).join("\n"),
   };
+
+  return Object.fromEntries(
+    Object.entries(answers).map(([field, answer]) => [field, { answer }]),
+  );
 }

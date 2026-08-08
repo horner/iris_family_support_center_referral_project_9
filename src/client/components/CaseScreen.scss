@@ -1,0 +1,66 @@
+.case-loading {
+  padding: 2rem 0.5rem;
+  color: var(--mieweb-text-muted, #5b6b82);
+}
+
+.case-back {
+  padding: 0 0.5rem 0 0;
+  background: none;
+  border: 0;
+  color: var(--mieweb-primary-500, #2f6feb);
+  cursor: pointer;
+}
+
+.case-header {
+  display: grid;
+  gap: 0.125rem;
+  margin-bottom: 0.5rem;
+}
+
+.case-heading {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.case-subheading {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--mieweb-text-muted, #5b6b82);
+}
+
+.case-presence,
+.case-storage {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--mieweb-text-muted, #5b6b82);
+}
+
+.case-modes {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid var(--mieweb-border, #e2e8f0);
+}
+
+.case-mode {
+  flex: 1;
+  padding: 0 0.5rem;
+  background: none;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  color: var(--mieweb-text-muted, #5b6b82);
+  cursor: pointer;
+}
+
+.case-mode--on {
+  color: var(--mieweb-primary-500, #2f6feb);
+  border-bottom-color: var(--mieweb-primary-500, #2f6feb);
+  font-weight: 600;
+}
+
+@media (min-width: 768px) {
+  .case-mode {
+    flex: 0 0 auto;
+    min-width: 9rem;
+  }
+}

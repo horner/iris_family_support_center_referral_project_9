@@ -1,0 +1,137 @@
+.queue-header {
+  display: grid;
+  gap: 0.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.queue-heading {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.queue-count {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--mieweb-text-muted, #5b6b82);
+}
+
+.queue-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.375rem;
+}
+
+.queue-empty {
+  padding: 1.5rem 0.5rem;
+  color: var(--mieweb-text-muted, #5b6b82);
+}
+
+.queue-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.queue-card {
+  display: grid;
+  gap: 0.125rem;
+  width: 100%;
+  padding: 0.75rem;
+  text-align: start;
+  cursor: pointer;
+  color: inherit;
+  background: var(--mieweb-surface, #fff);
+  border: 1px solid var(--mieweb-border, #e2e8f0);
+  border-inline-start-width: 4px;
+  border-radius: 0.5rem;
+}
+
+// Urgency is carried by the leading edge, so it survives a greyscale screen
+// in bright sunlight; the countdown text says the same thing in words.
+.queue-card--overdue {
+  border-inline-start-color: var(--mieweb-danger-500, #c0392b);
+}
+
+.queue-card--today {
+  border-inline-start-color: var(--mieweb-warning-500, #c77700);
+}
+
+.queue-card--soon {
+  border-inline-start-color: var(--mieweb-warning-300, #f0c98a);
+}
+
+.queue-card--ok {
+  border-inline-start-color: var(--mieweb-border, #e2e8f0);
+}
+
+.queue-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.queue-referral {
+  font-weight: 600;
+}
+
+.queue-service {
+  font-size: 0.9375rem;
+}
+
+.queue-county,
+.queue-assignee {
+  font-size: 0.875rem;
+  color: var(--mieweb-text-muted, #5b6b82);
+}
+
+.queue-deadline {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.queue-pinned {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.queue-pinned-note {
+  font-size: 0.75rem;
+  color: var(--mieweb-text-muted, #5b6b82);
+}
+
+@media (min-width: 768px) {
+  .queue-header {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+  }
+
+  .queue-actions {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    margin-top: 0;
+  }
+
+  .queue-card {
+    // `minmax(0, 1fr)` rather than `1fr`: a grid track defaults to its
+    // content's min-width, and a long service name would push the row wider
+    // than the viewport at exactly 768px.
+    grid-template-columns: 7rem minmax(0, 1fr) 6rem 8rem 10rem;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .queue-card > * {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .queue-pinned {
+    grid-column: 1 / -1;
+    margin-top: 0;
+  }
+}

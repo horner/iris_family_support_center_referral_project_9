@@ -1,0 +1,99 @@
+.explore-title {
+  margin: 0.5rem 0 0.25rem;
+  font-size: 1rem;
+}
+
+.explore-summary {
+  margin: 0 0 0.5rem;
+  font-size: 0.875rem;
+  color: var(--mieweb-text-muted, #5b6b82);
+}
+
+.explore-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.explore-card {
+  display: grid;
+  gap: 0.375rem;
+  width: 100%;
+  padding: 0.75rem;
+  text-align: start;
+  cursor: pointer;
+  color: inherit;
+  background: var(--mieweb-surface, #fff);
+  border: 1px solid var(--mieweb-border, #e2e8f0);
+  border-radius: 0.5rem;
+}
+
+.explore-card--selected {
+  border-color: var(--mieweb-primary-500, #2f6feb);
+  box-shadow: inset 0 0 0 1px var(--mieweb-primary-500, #2f6feb);
+}
+
+// Blocked candidates stay on screen and stay legible — dimmed enough to read
+// as unavailable, not so far that the reason becomes unreadable.
+.explore-card--blocked {
+  background: var(--mieweb-surface-muted, #f4f6fa);
+  cursor: not-allowed;
+}
+
+.explore-card--blocked .explore-name,
+.explore-card--blocked .explore-score {
+  color: var(--mieweb-text-muted, #5b6b82);
+}
+
+.explore-identity {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.explore-name {
+  font-weight: 600;
+}
+
+.explore-meta {
+  font-size: 0.8125rem;
+  color: var(--mieweb-text-muted, #5b6b82);
+}
+
+.explore-gates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.explore-blocked {
+  font-size: 0.8125rem;
+  color: var(--mieweb-danger-700, #8f2c20);
+}
+
+.explore-score {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  font-size: 0.8125rem;
+  color: var(--mieweb-text-muted, #5b6b82);
+}
+
+@media (min-width: 768px) {
+  .explore-card {
+    grid-template-columns: minmax(0, 12rem) minmax(0, 1fr) minmax(0, 14rem);
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .explore-card > * {
+    min-width: 0;
+  }
+
+  .explore-blocked {
+    grid-column: 2 / -1;
+  }
+}

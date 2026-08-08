@@ -1,0 +1,33 @@
+.case-sheet-title {
+  margin: 0.5rem 0 0.5rem;
+  font-size: 1rem;
+}
+
+.case-sheet-form {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  background: var(--mieweb-surface, #fff);
+  border: 1px solid var(--mieweb-border, #e2e8f0);
+}
+
+.case-sheet-disclosure {
+  margin-top: 0.75rem;
+  padding: 0 0.75rem;
+  background: none;
+  border: 1px solid var(--mieweb-border, #e2e8f0);
+  border-radius: 0.375rem;
+  color: var(--mieweb-primary-500, #2f6feb);
+  cursor: pointer;
+}
+
+.case-sheet-raw {
+  margin: 0.5rem 0 0;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  background: var(--mieweb-surface, #fff);
+  border: 1px solid var(--mieweb-border, #e2e8f0);
+  font-size: 0.8125rem;
+  // The source email is the one place we must not clip or scroll sideways.
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}

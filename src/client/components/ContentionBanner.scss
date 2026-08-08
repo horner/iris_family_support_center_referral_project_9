@@ -1,0 +1,68 @@
+.contention-banner {
+  margin-bottom: 0.75rem;
+  border-radius: 0.5rem;
+  background: var(--mieweb-surface, #fff);
+  border: 1px solid var(--mieweb-warning-300, #f0c98a);
+}
+
+.contention-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.625rem 0.75rem;
+  background: none;
+  border: 0;
+  border-radius: 0.5rem;
+  text-align: start;
+  cursor: pointer;
+  color: inherit;
+}
+
+.contention-title {
+  flex: 1;
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.contention-hint {
+  font-size: 0.8125rem;
+  color: var(--mieweb-text-muted, #5b6b82);
+}
+
+.contention-list {
+  margin: 0;
+  padding: 0 0.75rem 0.75rem;
+  list-style: none;
+}
+
+.contention-item {
+  display: grid;
+  gap: 0.125rem;
+  padding: 0.5rem 0;
+  border-top: 1px solid var(--mieweb-border, #e2e8f0);
+  font-size: 0.875rem;
+}
+
+.contention-staff {
+  font-weight: 600;
+}
+
+.contention-referrals {
+  color: var(--mieweb-text-muted, #5b6b82);
+  font-size: 0.8125rem;
+  // Referral lists get long; wrap them rather than scroll the page sideways.
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 768px) {
+  .contention-item {
+    grid-template-columns: 5rem minmax(0, 1fr) minmax(0, 12rem);
+    align-items: baseline;
+    gap: 0.75rem;
+  }
+
+  .contention-item > * {
+    min-width: 0;
+  }
+}

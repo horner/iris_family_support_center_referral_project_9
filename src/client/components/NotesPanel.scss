@@ -1,0 +1,73 @@
+/* Shared notes on a case. Phone layout first: full-width stack, no side rail. */
+.notes-panel {
+  border: 1px solid var(--mieweb-border, #d8dde5);
+  border-radius: 0.75rem;
+  padding: 0.75rem;
+  margin-block: 1rem;
+  background: var(--mieweb-surface, #fff);
+}
+
+.notes-title {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--mieweb-text, #1b2130);
+}
+
+.notes-list {
+  list-style: none;
+  margin: 0 0 0.75rem;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.notes-item {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  padding: 0.5rem 0.625rem;
+  border-radius: 0.5rem;
+  background: var(--mieweb-surface-muted, #f4f6f9);
+}
+
+.notes-meta {
+  display: block;
+  font-size: 0.8125rem;
+  color: var(--mieweb-text-muted, #5a6478);
+}
+
+.notes-text {
+  margin: 0.125rem 0 0;
+  color: var(--mieweb-text, #1b2130);
+}
+
+.notes-empty {
+  margin: 0 0 0.75rem;
+  color: var(--mieweb-text-muted, #5a6478);
+}
+
+.notes-form {
+  display: grid;
+  gap: 0.5rem;
+}
+
+/* 16px keeps iOS from auto-zooming the whole page on focus. */
+.notes-input {
+  width: 100%;
+  min-height: 4.5rem;
+  font: inherit;
+  font-size: 1rem;
+  padding: 0.5rem;
+  border: 1px solid var(--mieweb-border, #d8dde5);
+  border-radius: 0.5rem;
+  background: var(--mieweb-surface, #fff);
+  color: var(--mieweb-text, #1b2130);
+  resize: vertical;
+}
+
+@media (min-width: 48rem) {
+  .notes-form {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+  }
+}

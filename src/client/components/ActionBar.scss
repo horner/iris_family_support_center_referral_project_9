@@ -1,0 +1,57 @@
+.action-bar {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 10;
+  padding: 0.625rem 0.75rem calc(0.625rem + env(safe-area-inset-bottom));
+  background: var(--mieweb-surface, #fff);
+  border-top: 1px solid var(--mieweb-border, #e2e8f0);
+}
+
+.action-bar--done {
+  text-align: center;
+  font-weight: 600;
+  color: var(--mieweb-success-700, #1f6b45);
+}
+
+.action-offline {
+  margin: 0 0 0.5rem;
+  font-size: 0.8125rem;
+  color: var(--mieweb-warning-700, #8a5300);
+}
+
+.action-buttons {
+  display: flex;
+  // A wide gap between Decline and Assign: they are not interchangeable.
+  gap: 1.5rem;
+}
+
+.action-decline,
+.action-assign {
+  flex: 1;
+  min-height: 44px;
+}
+
+.action-assign {
+  flex: 1.4;
+}
+
+@media (min-width: 768px) {
+  .action-bar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
+    padding-inline: 1.5rem;
+  }
+
+  .action-buttons {
+    flex: 0 0 auto;
+  }
+
+  .action-decline,
+  .action-assign {
+    flex: 0 0 auto;
+    min-width: 10rem;
+  }
+}

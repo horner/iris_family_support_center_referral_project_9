@@ -47,3 +47,36 @@ button {
   white-space: nowrap;
   border: 0;
 }
+
+// WCAG 2.5.5: every tappable thing is at least 44x44, thumb-sized by default.
+// The `.app-shell` prefix is deliberate — it outranks the utility height class
+// (`h-8`) that @mieweb/ui puts on small buttons, which would otherwise leave a
+// 32px target on a phone.
+.app-shell button,
+.app-shell [role="button"],
+.app-shell a.tappable {
+  min-height: 44px;
+}
+
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  // Room for the sticky action bar plus the iOS home indicator.
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.app-main {
+  flex: 1;
+  padding: 0.75rem 0.75rem 6rem;
+}
+
+@media (min-width: 768px) {
+  .app-main {
+    padding: 1.25rem 1.5rem 6rem;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 68rem;
+  }
+}
+

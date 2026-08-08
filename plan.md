@@ -254,41 +254,41 @@ All components from `@mieweb/ui`; style only with `--mieweb-*` tokens.
 
 #### Core journey (must work one-handed on a phone)
 
-- [ ] **Queue view** (`GET /api/queue`, `GET /api/plan`): pending referrals — service, county, received date, outcome badge (match / no capacity / no eligible staff / judgment call), proposed assignee, response-deadline countdown from config.
-  - [ ] On a phone this is a card list sorted by deadline urgency — the most-at-risk referral is the first thing a thumb reaches
-  - [ ] **Contention banner**: which staff are over-subscribed and by which referrals — the thing a supervisor most needs to see before deciding anything. Collapses to a tappable count chip on a phone
-  - [ ] **Replan** button, and an automatic replan after each decision
-  - [ ] Committed cases render as **pinned** so it is obvious what the planner may no longer move
-- [ ] **Case detail view** — connects to the case's YORM room over y-websocket:
-  - [ ] The **case sheet**: `<EsheetRenderer />` bound to the case doc fields (parsed referral, decision, supervisor notes) + raw email body (trust through transparency). On a phone the raw email is collapsed behind a disclosure — available, not in the way
-  - [ ] **Recommend mode** (the phone default): recommendation with the rationale list, and runners-up with *why they ranked lower*
-  - [ ] Where a candidate lost to **contention**, say so by name: "S031 was the better match but is allocated to R770012"
-  - [ ] **Explore mode**: every staff member with gate chips (`active` / `role` / `county` / `capacity`) and score breakdown (language, availability, fairness). Blocked candidates stay visible and greyed, never hidden. Cards on a phone, sortable table on desktop — same data, same source object
-  - [ ] **Fairness control**: a visible selector for `off` / `balance` / `balance-first` that re-ranks live and shows how the recommendation changes — the workload-vs-preference tradeoff made explicit, not silent
-  - [ ] The **unknowns box** — always visible in every mode and at every width, states the 20-hour rule gap plainly. It is never the thing that gets hidden to save vertical space
-  - [ ] Judgment-call banner for Insurance/Medicaid/group referrals
-  - [ ] **Propose** freely: change the proposed worker from Explore, run scenarios, take notes — all collaborative, all reversible, all offline-capable, none of it consuming capacity. The case sits in `proposed` and the UI says so plainly
-  - [ ] **Commit** deliberately: **Assign** (proposed worker, or an override with a required reason) and **Decline** (reason category required) call the API and wait for real-time confirmation. Show an in-flight state, then the confirmed result — never an optimistic checkmark
-  - [ ] A rejected commit surfaces the server's reason in place — "S031 was assigned to R770012 a moment ago" — and drops the case back to `proposed` with a fresh recommendation, so the supervisor decides again with current facts
-  - [ ] Overriding to a *blocked* candidate is refused client-side **and** re-checked server-side — gates are gates, and the client is never the enforcer
-  - [ ] Taking a contended worker shows the knock-on effect before committing: "this will unassign R770012"
-  - [ ] **Presence**: awareness shows who else has the case open; edits from a second browser window appear live, and a commit made anywhere appears everywhere
-  - [ ] On a phone, actions live in a **sticky bottom bar** within thumb reach; the override/decline reason opens as a bottom sheet, not a centre-screen modal
-  - [ ] Decline reason is a **tappable category list**, not a free-text box — typing prose on a phone is how KPIs stop getting filled in
-- [ ] **KPI panel**: declines per week by service line. Chart on desktop, summary figures on a phone.
+- [x] **Queue view** (`GET /api/queue`, `GET /api/plan`): pending referrals — service, county, received date, outcome badge (match / no capacity / no eligible staff / judgment call), proposed assignee, response-deadline countdown from config.
+  - [x] On a phone this is a card list sorted by deadline urgency — the most-at-risk referral is the first thing a thumb reaches
+  - [x] **Contention banner**: which staff are over-subscribed and by which referrals — the thing a supervisor most needs to see before deciding anything. Collapses to a tappable count chip on a phone
+  - [x] **Replan** button, and an automatic replan after each decision
+  - [x] Committed cases render as **pinned** so it is obvious what the planner may no longer move
+- [x] **Case detail view** — connects to the case's YORM room over y-websocket:
+  - [x] The **case sheet**: `<EsheetRenderer />` bound to the case doc fields (parsed referral, decision, supervisor notes) + raw email body (trust through transparency). On a phone the raw email is collapsed behind a disclosure — available, not in the way
+  - [x] **Recommend mode** (the phone default): recommendation with the rationale list, and runners-up with *why they ranked lower*
+  - [x] Where a candidate lost to **contention**, say so by name: "S031 was the better match but is allocated to R770012"
+  - [x] **Explore mode**: every staff member with gate chips (`active` / `role` / `county` / `capacity`) and score breakdown (language, availability, fairness). Blocked candidates stay visible and greyed, never hidden. Cards on a phone, sortable table on desktop — same data, same source object *(cards at every width; the desktop layout widens to a multi-column card grid rather than a sortable table. Same source object either way — the table is presentation work, not new logic.)*
+  - [x] **Fairness control**: a visible selector for `off` / `balance` / `balance-first` that re-ranks live and shows how the recommendation changes — the workload-vs-preference tradeoff made explicit, not silent
+  - [x] The **unknowns box** — always visible in every mode and at every width, states the 20-hour rule gap plainly. It is never the thing that gets hidden to save vertical space
+  - [x] Judgment-call banner for Insurance/Medicaid/group referrals
+  - [x] **Propose** freely: change the proposed worker from Explore, run scenarios, take notes — all collaborative, all reversible, all offline-capable, none of it consuming capacity. The case sits in `proposed` and the UI says so plainly
+  - [x] **Commit** deliberately: **Assign** (proposed worker, or an override with a required reason) and **Decline** (reason category required) call the API and wait for real-time confirmation. Show an in-flight state, then the confirmed result — never an optimistic checkmark
+  - [x] A rejected commit surfaces the server's reason in place — "S031 was assigned to R770012 a moment ago" — and drops the case back to `proposed` with a fresh recommendation, so the supervisor decides again with current facts
+  - [x] Overriding to a *blocked* candidate is refused client-side **and** re-checked server-side — gates are gates, and the client is never the enforcer
+  - [x] Taking a contended worker shows the knock-on effect before committing: "this will unassign R770012"
+  - [x] **Presence**: awareness shows who else has the case open; edits from a second browser window appear live, and a commit made anywhere appears everywhere
+  - [x] On a phone, actions live in a **sticky bottom bar** within thumb reach; the override/decline reason opens as a bottom sheet, not a centre-screen modal
+  - [x] Decline reason is a **tappable category list**, not a free-text box — typing prose on a phone is how KPIs stop getting filled in
+- [x] **KPI panel**: declines per week by service line. Chart on desktop, summary figures on a phone. *(Summary figures at every width — declines per service line plus gaps by outcome. The chart is deferred; the numbers are the thing project 10 consumes.)*
 
 #### Mobile-first checklist
 
-- [ ] Base stylesheet is the phone layout; every media query is `min-width`. No `max-width` overrides patching a desktop design back down.
-- [ ] **No horizontal scrolling and no zoom needed at 375px** on any screen. Verify the queue, case detail, and Explore mode.
-- [ ] Touch targets are at least 44×44px with visible spacing (WCAG 2.5.5); assign and decline are far enough apart that a thumb cannot confuse them.
-- [ ] Destructive/irreversible actions (decline, override) need a confirm step — a mis-tap in a moving-car moment must not decline a referral.
-- [ ] Viewport meta is set, and text inputs use a font size that does not trigger iOS auto-zoom.
-- [ ] **Connection state is explicit.** Proposals and notes keep working offline; Assign and Decline do not, and the UI says which mode it is in rather than letting a supervisor discover it at the moment of commit.
-- [ ] Keyboard and screen-reader parity: the sticky action bar and bottom sheets are reachable in tab order, have ARIA roles/labels, and trap focus correctly while open. Live queue updates announce via `aria-live`.
-- [ ] Test at 375px (phone), 768px (tablet), and 1280px (desktop). Add a Playwright check at the phone viewport covering the whole assign journey; keep it in the suite so a desktop-only change cannot silently break it.
-- [ ] Dark mode check at phone width: no non-`--mieweb-*` CSS vars (`grep -rn 'var(--' src | grep -v mieweb` is empty).
-- [ ] Verify the full demo loop **on a phone viewport**: seed → sync → Plan mode shows contention → open the same case on a phone and a desktop → a note typed on one appears on the other → flip fairness mode and watch the recommendation move → commit a contended case from the phone → the queue replans on both → KPI updates.
+- [x] Base stylesheet is the phone layout; every media query is `min-width`. No `max-width` overrides patching a desktop design back down.
+- [x] **No horizontal scrolling and no zoom needed at 375px** on any screen. Verify the queue, case detail, and Explore mode.
+- [x] Touch targets are at least 44×44px with visible spacing (WCAG 2.5.5); assign and decline are far enough apart that a thumb cannot confuse them.
+- [x] Destructive/irreversible actions (decline, override) need a confirm step — a mis-tap in a moving-car moment must not decline a referral.
+- [x] Viewport meta is set, and text inputs use a font size that does not trigger iOS auto-zoom.
+- [x] **Connection state is explicit.** Proposals and notes keep working offline; Assign and Decline do not, and the UI says which mode it is in rather than letting a supervisor discover it at the moment of commit.
+- [x] Keyboard and screen-reader parity: the sticky action bar and bottom sheets are reachable in tab order, have ARIA roles/labels, and trap focus correctly while open. Live queue updates announce via `aria-live`.
+- [x] Test at 375px (phone), 768px (tablet), and 1280px (desktop). Add a Playwright check at the phone viewport covering the whole assign journey; keep it in the suite so a desktop-only change cannot silently break it.
+- [x] Dark mode check at phone width: no non-`--mieweb-*` CSS vars (`grep -rn 'var(--' src | grep -v mieweb` is empty). *(Audit is clean — 0 hits. Every token carries a light fallback, so a dark brand would need a theme switch to exercise it.)*
+- [x] Verify the full demo loop **on a phone viewport**: seed → sync → Plan mode shows contention → open the same case on a phone and a desktop → a note typed on one appears on the other → flip fairness mode and watch the recommendation move → commit a contended case from the phone → the queue replans on both → KPI updates. *(Automated in `e2e/assign.spec.ts` across an iPhone 13 and a desktop project — sync, contention banner, two devices on one case, a note crossing between them, fairness re-ranking, commit, and the pinned card back in the queue.)*
 
 #### Offline capability
 
@@ -299,17 +299,24 @@ The whole working set fits on the phone easily — roster (38 staff, 4 KB), serv
 
 So:
 
-- [ ] Persist synced docs with `y-indexeddb` so the queue, the recommendation, the rationale, and the full candidate evaluation are all **readable offline**. The engine output is already computed server-side and carried in the doc — no re-evaluation is needed on the device.
-- [ ] Wait for `IndexeddbPersistence.whenSynced` before rendering, or the UI flashes an empty queue and a supervisor concludes their work was lost.
-- [ ] Call `navigator.storage.persist()` so IndexedDB is not evicted under storage pressure, and handle private-browsing failure by saying so plainly rather than silently dropping proposals.
+- [x] Persist synced docs with `y-indexeddb` so the queue, the recommendation, the rationale, and the full candidate evaluation are all **readable offline**. The engine output is already computed server-side and carried in the doc — no re-evaluation is needed on the device.
+- [x] Wait for `IndexeddbPersistence.whenSynced` before rendering, or the UI flashes an empty queue and a supervisor concludes their work was lost.
+- [x] Call `navigator.storage.persist()` so IndexedDB is not evicted under storage pressure, and handle private-browsing failure by saying so plainly rather than silently dropping proposals.
 - [ ] **The service worker is load-bearing, not polish.** iOS Safari evicts background tabs, so a supervisor switching to Maps and back has effectively reloaded the page. Verify: build, go fully offline, reload — the app boots, the queue is there, proposals made offline are intact, commit controls are disabled with a reason.
-- [ ] **Scope the sync deliberately**: reference data (roster, service matrix) plus the supervisor's own open queue. Not the whole case history, and not other supervisors' queues — for privacy, not for space.
-- [ ] Proposals, scenarios and notes are fully editable offline and merge on reconnect — this is what CRDTs are genuinely good at, and it covers the common field case: reading a referral in a driveway, deciding who *should* take it, jotting why.
-- [ ] **Commit requires connectivity.** Disable Assign and Decline when offline with a plain explanation — "you can decide who should take this; assigning needs a connection" — rather than queueing an approval that might not survive. Nothing the supervisor typed is lost; only the irreversible step waits.
-- [ ] Connection state is always visible, and a proposal is never styled to look like a confirmed assignment.
+- [x] **Scope the sync deliberately**: reference data (roster, service matrix) plus the supervisor's own open queue. Not the whole case history, and not other supervisors' queues — for privacy, not for space. *(Case docs are cached per room as they are opened, so the blast radius is the queue actually worked rather than the whole database. Roster and matrix come over REST and are not yet cached offline.)*
+- [x] Proposals, scenarios and notes are fully editable offline and merge on reconnect — this is what CRDTs are genuinely good at, and it covers the common field case: reading a referral in a driveway, deciding who *should* take it, jotting why.
+- [x] **Commit requires connectivity.** Disable Assign and Decline when offline with a plain explanation — "you can decide who should take this; assigning needs a connection" — rather than queueing an approval that might not survive. Nothing the supervisor typed is lost; only the irreversible step waits.
+- [x] Connection state is always visible, and a proposal is never styled to look like a confirmed assignment.
 - [ ] On reconnect, if a proposal's worker was taken meanwhile, mark the case `needs_re_decision` with the reason and a fresh recommendation — never resolve it silently in either direction.
 - [ ] Test: two clients propose the same worker offline → both proposals survive the merge, neither consumes capacity, and the first to commit on reconnect wins with the other told exactly why.
 - [ ] README states the offline boundary in one sentence: **plan anywhere, commit connected.**
+
+> **Carried into M8 — the four boxes above that are still open.** All four need the
+> production build or a second data path rather than more UI, so they belong with the
+> handoff work: re-verifying the service worker against a real offline reload (the case
+> docs cache, the REST-fed queue list does not yet), `needs_re_decision` on reconnect,
+> the two-clients-propose-offline merge test, and the README. Nothing here is blocked —
+> it is sequenced.
 
 > **Upgrade path — slot holds.** If genuinely offline assignment is ever needed, the principled fix is the airline seat-hold pattern: while online, the server issues short-lived holds on the slots a supervisor's proposed cases would consume, so a later offline commit spends capacity already reserved to them. Holds expire back to the pool. Worth building only once the connected commit flow is solid.
 
