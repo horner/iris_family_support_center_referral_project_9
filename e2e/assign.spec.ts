@@ -14,8 +14,11 @@ const noHorizontalOverflow = async (page: Page): Promise<boolean> =>
     () => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
   );
 
+/** `/` is the welcome page; the supervisor's work starts one route in. */
+const QUEUE = "/#/queue";
+
 test("supervisor can sync, open a case and assign", async ({ page }) => {
-  await page.goto("/");
+  await page.goto(QUEUE);
 
   await expect(page.getByRole("heading", { name: /Iris referral matching/i })).toBeVisible();
 
@@ -64,7 +67,7 @@ test("supervisor can sync, open a case and assign", async ({ page }) => {
 });
 
 test("declining captures a tappable reason", async ({ page }) => {
-  await page.goto("/");
+  await page.goto(QUEUE);
   await page.getByRole("button", { name: /Sync mail/i }).click();
   await expect(page.locator(".queue-count")).toBeVisible({ timeout: 30_000 });
 
@@ -88,7 +91,7 @@ test("declining captures a tappable reason", async ({ page }) => {
 });
 
 test("a note typed on one device appears on the other", async ({ page, context }) => {
-  await page.goto("/");
+  await page.goto(QUEUE);
   await page.getByRole("button", { name: /Sync mail/i }).click();
   await expect(page.locator(".queue-count")).toBeVisible({ timeout: 30_000 });
 
@@ -100,7 +103,7 @@ test("a note typed on one device appears on the other", async ({ page, context }
   // The same case, open on a second device — the supervisor's laptop while the
   // phone is in a car park.
   const other = await context.newPage();
-  await other.goto("/");
+  await other.goto(QUEUE);
   await other.locator(`.queue-card[aria-label="Open ${caseId}"]`).click();
   await expect(other.getByRole("heading", { name: /Shared notes/i })).toBeVisible();
 
@@ -113,10 +116,51 @@ test("a note typed on one device appears on the other", async ({ page, context }
   await other.close();
 });
 
+test("the welcome page points at the app, the inbox and the source", async ({ page }) => {
+  await page.goto("/");
+
+  await expect(page.getByRole("heading", { name: /Referral triage for Indiana DCS/i })).toBeVisible();
+
+  // Mailpit is how a reviewer creates a referral, so it is a first-class link.
+  await expect(page.getByRole("link", { name: /Demo inbox/i })).toHaveAttribute(
+    "href",
+    /:8025$/,
+  );
+  await expect(page.getByRole("link", { name: /Source code/i })).toHaveAttribute(
+    "href",
+    /IrisDCSReferrals/,
+  );
+
+  await page.getByRole("link", { name: /Open the supervisor queue/i }).click();
+  await expect(page.getByRole("button", { name: /Sync mail/i })).toBeVisible();
+  expect(await noHorizontalOverflow(page)).toBe(false);
+});
+
+test("back walks out of a case tab by tab", async ({ page }) => {
+  await page.goto(QUEUE);
+  await page.getByRole("button", { name: /Sync mail/i }).click();
+  await expect(page.locator(".queue-count")).toBeVisible({ timeout: 30_000 });
+
+  await page.locator(".queue-card").first().click();
+  await expect(page).toHaveURL(/#\/case\/.+\/recommend$/);
+
+  await page.getByRole("button", { name: "Explore", exact: true }).click();
+  await expect(page).toHaveURL(/#\/case\/.+\/explore$/);
+
+  // A tab is a history entry, so back is undo rather than "leave the case".
+  await page.goBack();
+  await expect(page).toHaveURL(/#\/case\/.+\/recommend$/);
+  await expect(page.getByRole("heading", { name: /Recommended worker/i })).toBeVisible();
+
+  await page.goBack();
+  await expect(page).toHaveURL(/#\/queue$/);
+  await expect(page.getByRole("button", { name: /Sync mail/i })).toBeVisible();
+});
+
 for (const width of [375, 768, 1280]) {
   test(`no horizontal overflow at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
-    await page.goto("/");
+    await page.goto(QUEUE);
     await page.getByRole("button", { name: /Sync mail/i }).click();
     await expect(page.locator(".queue-count")).toBeVisible({ timeout: 30_000 });
 
@@ -130,7 +174,7 @@ for (const width of [375, 768, 1280]) {
 
 test("every tappable target clears 44px", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 812 });
-  await page.goto("/");
+  await page.goto(QUEUE);
   await page.getByRole("button", { name: /Sync mail/i }).click();
   await expect(page.locator(".queue-count")).toBeVisible({ timeout: 30_000 });
   await page.locator(".queue-card").first().click();

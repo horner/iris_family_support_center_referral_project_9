@@ -13,6 +13,7 @@ import { caseStatus } from "../../case-doc.ts";
 import type { EngineConfig, FairnessStrategy, Pin, Plan } from "../../model.ts";
 import { assign, decline, newCommitKey, scenario, type StaffRow } from "../api.ts";
 import { useI18n, type MessageKey } from "../i18n.ts";
+import { CASE_MODES, type CaseMode } from "../hooks/useHashRoute.ts";
 import { useCaseDoc, type Presence } from "../hooks/useCaseDoc.ts";
 import { ActionBar } from "./ActionBar.tsx";
 import { CaseSheet } from "./CaseSheet.tsx";
@@ -41,7 +42,6 @@ const OVERRIDE_REASONS: readonly MessageKey[] = [
   "override.other",
 ];
 
-type CaseMode = "recommend" | "explore" | "sheet";
 type SheetKind = "assign" | "decline";
 
 export interface CaseScreenProps {
@@ -50,6 +50,9 @@ export interface CaseScreenProps {
   roster: Map<string, StaffRow>;
   online: boolean;
   fairness: FairnessStrategy;
+  /** Routed, so each tab is its own history entry and its own shareable link. */
+  mode: CaseMode;
+  onModeChange: (mode: CaseMode) => void;
   onFairnessChange: (value: FairnessStrategy) => void;
   onBack: () => void;
   onCommitted: () => void;
@@ -61,13 +64,14 @@ export function CaseScreen({
   roster,
   online,
   fairness,
+  mode,
+  onModeChange,
   onFairnessChange,
   onBack,
   onCommitted,
 }: CaseScreenProps): React.ReactElement {
   const { t } = useI18n();
   const live = useCaseDoc(messageId, me);
-  const [mode, setMode] = useState<CaseMode>("recommend");
   const [selected, setSelected] = useState<string>();
   const [sheet, setSheet] = useState<SheetKind>();
   const [busy, setBusy] = useState(false);
@@ -215,12 +219,12 @@ export function CaseScreen({
       </header>
 
       <nav className="case-modes" aria-label={t("app.title")}>
-        {(["recommend", "explore", "sheet"] as CaseMode[]).map((option) => (
+        {CASE_MODES.map((option) => (
           <button
             aria-current={mode === option}
             className={`case-mode${mode === option ? " case-mode--on" : ""}`}
             key={option}
-            onClick={() => setMode(option)}
+            onClick={() => onModeChange(option)}
             type="button"
           >
             {t(`mode.${option}` as MessageKey)}

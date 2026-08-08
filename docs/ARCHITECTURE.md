@@ -156,11 +156,17 @@ offline-capable. The single act that spends a scarce slot is server-authoritativ
     ├── server.ts             Hono: YORM mount + REST API
     ├── case-doc.ts           canonical case document shape
     ├── case-sheet.ts         eSheet form definition (shares field names)
-    └── db/
-        ├── index.ts          the only file importing better-sqlite3
-        ├── schema.ts         reference tables + YORM projections
-        ├── mapping.ts        defineMapping('iris.Case', v1)
-        └── import.ts         CSV → reference tables
+    ├── db/
+    │   ├── index.ts          the only file importing better-sqlite3
+    │   ├── schema.ts         reference tables + YORM projections
+    │   ├── mapping.ts        defineMapping('iris.Case', v1)
+    │   └── import.ts         CSV → reference tables
+    └── client/
+        ├── App.tsx           shell: locale, connection state, route switch
+        ├── i18n.ts           every user-facing string, English + Spanish
+        ├── api.ts            typed fetch wrappers (a 409 is data, not an error)
+        ├── hooks/            useHashRoute, useQueue, useCaseDoc, useOnline
+        └── components/       one .tsx and one .scss per screen
 ```
 
 ## Data model
@@ -305,6 +311,22 @@ Rules the server enforces:
 - **Replan the remaining queue** so consumed or freed slots reallocate immediately.
 
 ## Client architecture
+
+### Routes
+
+Hash routing, hand-rolled in `hooks/useHashRoute.ts`. Hash rather than history so the
+PWA needs no server rewrite rule and survives an offline reload from the cache.
+
+| Route | Screen |
+|---|---|
+| `#/` | Welcome — what Iris is, plus links to the demo inbox and the source |
+| `#/queue` | Plan mode |
+| `#/kpi` | KPI summary |
+| `#/case/:messageId/:mode` | One case, `mode` ∈ `recommend` \| `explore` \| `sheet` |
+
+The case *tab* is in the route, not in component state, for two reasons: the phone back
+button then steps back a tab at a time instead of dumping the supervisor out of the case,
+and a specific view of a specific case can be pasted to a colleague as a link.
 
 ### Three modes over one plan
 

@@ -28,6 +28,24 @@ const en = {
   "app.loading": "Loading…",
   "app.error": "Something went wrong: {message}",
   "app.back": "Back to the queue",
+  "app.home": "Start page",
+
+  "welcome.title": "Referral triage for Indiana DCS",
+  "welcome.lede":
+    "Referrals arrive by email. Iris parses them, checks every worker against the role, county, capacity and active-status rules, and proposes who should take each one — showing its reasoning rather than a score. A supervisor decides.",
+  "welcome.enter": "Open the supervisor queue",
+  "welcome.tryTitle": "Try it end to end",
+  "welcome.step1": "Send a referral email into the demo inbox, or use the 30 already seeded there.",
+  "welcome.step2": "Open the queue and press Sync mail to pull the inbox in and plan the whole set.",
+  "welcome.step3":
+    "Open a case, read why a worker was recommended, explore who else could take it, then assign or decline.",
+  "welcome.linksTitle": "Where things live",
+  "welcome.mailpit": "Demo inbox (Mailpit)",
+  "welcome.mailpitDetail":
+    "The referral mailbox Iris reads. Send a message here to watch a new case appear.",
+  "welcome.repo": "Source code",
+  "welcome.repoDetail": "The matching engine, the planner, and the tests that pin their behaviour.",
+  "welcome.boundary": "Plan anywhere, commit connected — everything except assigning works offline.",
 
   "mode.plan": "Plan",
   "mode.recommend": "Recommend",
@@ -173,6 +191,26 @@ const es: Partial<Record<MessageKey, string>> = {
   "app.online": "Conectado",
   "app.loading": "Cargando…",
   "app.back": "Volver a la cola",
+  "welcome.title": "Clasificación de derivaciones para DCS de Indiana",
+  "welcome.lede":
+    "Las derivaciones llegan por correo. Iris las interpreta, evalúa a cada profesional según las reglas de función, condado, capacidad y estado activo, y propone quién debería atender cada caso — mostrando su razonamiento en lugar de una puntuación. Decide el supervisor.",
+  "welcome.enter": "Abrir la cola del supervisor",
+  "welcome.tryTitle": "Pruébelo de principio a fin",
+  "welcome.step1":
+    "Envíe un correo de derivación al buzón de demostración, o use las 30 ya cargadas.",
+  "welcome.step2":
+    "Abra la cola y pulse Sincronizar correo para incorporar el buzón y planificar todo el conjunto.",
+  "welcome.step3":
+    "Abra un caso, lea por qué se recomendó a esa persona, explore quién más podría atenderlo y asigne o rechace.",
+  "welcome.linksTitle": "Dónde está cada cosa",
+  "welcome.mailpit": "Buzón de demostración (Mailpit)",
+  "welcome.mailpitDetail":
+    "El buzón de derivaciones que lee Iris. Envíe un mensaje aquí para ver aparecer un caso nuevo.",
+  "welcome.repo": "Código fuente",
+  "welcome.repoDetail":
+    "El motor de emparejamiento, el planificador y las pruebas que fijan su comportamiento.",
+  "welcome.boundary":
+    "Planifique en cualquier lugar, confirme con conexión — todo excepto asignar funciona sin conexión.",
   "mode.plan": "Plan",
   "mode.recommend": "Recomendar",
   "mode.explore": "Explorar",

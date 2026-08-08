@@ -14,6 +14,13 @@
   font-weight: 700;
 }
 
+.app-brand-link {
+  display: inline-flex;
+  align-items: center;
+  color: inherit;
+  text-decoration: none;
+}
+
 .app-connection {
   grid-column: 1;
   margin: 0;

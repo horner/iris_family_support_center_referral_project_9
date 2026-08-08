@@ -1,0 +1,91 @@
+/* Landing page. Phone layout first: one column, generous tap targets. */
+.welcome {
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem;
+}
+
+.welcome-lede {
+  font-size: 1.125rem;
+  line-height: 1.5;
+  color: var(--mieweb-text, #1b2130);
+}
+
+.welcome-note {
+  color: var(--mieweb-text-muted, #5a6478);
+}
+
+.welcome-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0.75rem 1.25rem;
+  margin-block: 1rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--mieweb-primary-contrast, #fff);
+  background: var(--mieweb-primary-500, #2f6feb);
+}
+
+.welcome-cta:hover {
+  background: var(--mieweb-primary-600, #2559c4);
+}
+
+.welcome-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.welcome-link {
+  display: block;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  padding: 0.75rem;
+  border: 1px solid var(--mieweb-border, #d8dde5);
+  border-radius: 0.75rem;
+  text-decoration: none;
+  color: inherit;
+  background: var(--mieweb-surface, #fff);
+}
+
+.welcome-link:hover {
+  border-color: var(--mieweb-primary-500, #2f6feb);
+}
+
+.welcome-link-title {
+  display: block;
+  font-weight: 600;
+  color: var(--mieweb-primary-600, #2559c4);
+}
+
+.welcome-link-detail {
+  display: block;
+  margin-top: 0.125rem;
+  font-size: 0.9375rem;
+  color: var(--mieweb-text-muted, #5a6478);
+}
+
+.welcome-steps {
+  margin: 0;
+  padding-left: 1.25rem;
+  list-style: decimal;
+  display: grid;
+  gap: 0.375rem;
+  color: var(--mieweb-text, #1b2130);
+}
+
+.welcome h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.5rem;
+  line-height: 1.2;
+}
+
+.welcome h3 {
+  margin: 1.75rem 0 0.75rem;
+  font-size: 1.0625rem;
+}
