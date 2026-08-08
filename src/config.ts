@@ -8,10 +8,13 @@
  */
 import type { EngineConfig } from "./model.ts";
 
-export const MAILPIT_API = process.env.MAILPIT_API ?? "http://localhost:8025";
+/** Undefined in the browser bundle, which imports this file for `APP_CONFIG`. */
+const env: Record<string, string | undefined> = globalThis.process?.env ?? {};
+
+export const MAILPIT_API = env["MAILPIT_API"] ?? "http://localhost:8025";
 export const MAILPIT_SMTP = {
-  host: process.env.MAILPIT_HOST ?? "localhost",
-  port: Number(process.env.MAILPIT_PORT ?? 1025),
+  host: env["MAILPIT_HOST"] ?? "localhost",
+  port: Number(env["MAILPIT_PORT"] ?? 1025),
 };
 
 export interface ResponseDeadlineConfig {

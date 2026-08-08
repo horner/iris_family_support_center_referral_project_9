@@ -69,17 +69,17 @@ Rules for the junior dev:
 ### Milestone 2 — Ingest + parser
 > Commit: `M2: mailpit ingest and referral parser with tests`
 
-- [ ] `src/ingest.ts`: fetch messages from Mailpit REST API (`GET /api/v1/messages`, then message detail). Dedupe by `Message-ID`.
-- [ ] `src/parser.ts`: parse the body into a typed `Referral`:
+- [x] `src/ingest.ts`: fetch messages from Mailpit REST API (`GET /api/v1/messages`, then message detail). Dedupe by `Message-ID`.
+- [x] `src/parser.ts`: parse the body into a typed `Referral`:
   - `caseNumber`, `referralId`, `service`, `county`, `region`, `fcmName`, `fcmPhone`, `requestedStartDate`, `childrenInHome` — from labelled lines
   - `notes` — raw prose
   - `preferences` — extracted from notes: `{ bilingual?: boolean, language?: string, availability?: ('Evenings'|'Weekends')[], expedite?: boolean }`. Keyword rules are fine (e.g. /bilingual|spanish/i, /evenings?/i, /weekends?/i, /expedite|permanency hearing/i). Note in a comment this is the step a model would own in production.
-- [ ] Parser must be tolerant: unknown lines ignored, missing fields become `undefined` and flagged in `parseWarnings[]` — never throw on a well-formed email.
-- [ ] Tests (`parser.test.ts`):
-  - [ ] All 30 emails parse with zero warnings
-  - [ ] Every parsed `service` exists in `service_role_matrix.csv`
-  - [ ] A referral mentioning "Evenings and weekends preferred" yields those preferences
-  - [ ] A mangled body (missing Service line) produces a warning, not a crash
+- [x] Parser must be tolerant: unknown lines ignored, missing fields become `undefined` and flagged in `parseWarnings[]` — never throw on a well-formed email.
+- [x] Tests (`parser.test.ts`):
+  - [x] All 30 emails parse with zero warnings
+  - [x] Every parsed `service` exists in `service_role_matrix.csv`
+  - [x] A referral mentioning "Evenings and weekends preferred" yields those preferences
+  - [x] A mangled body (missing Service line) produces a warning, not a crash
 
 ### Milestone 3 — Database schema, YORM mapping + data loaders
 > Commit: `M3: drizzle schema, yorm case mapping, roster and service matrix loaders with tests`
