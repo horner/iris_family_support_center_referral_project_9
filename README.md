@@ -70,6 +70,7 @@ Then open http://localhost:5173 (the demo inbox is at http://localhost:8025).
 | [flow.md](flow.md) | The manual process today vs what we automate |
 | [plan.md](plan.md) | Build sequence and milestone checklists |
 | [research/](research/) | Why there is no referral API to integrate with |
+| [chats/](chats/) | Verbatim AI pairing transcripts — [chat0.md](chats/chat0.md) (KidTraks research write-up) and [chat1.md](chats/chat1.md) (milestones 0–7 build) |
 | [src/](src/) | Ingest → parse → evaluate → plan pipeline, Hono server, React client |
 | [staff_roster.csv](staff_roster.csv), [service_role_matrix.csv](service_role_matrix.csv), [referral_emails.json](referral_emails.json) | The data pack |
 
