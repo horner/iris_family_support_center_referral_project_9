@@ -26,7 +26,12 @@ export function importReferenceData(db: BetterSQLite3Database): {
       availability: person.availability,
       active: person.active,
     };
-    db.insert(staff).values(row).onConflictDoUpdate({ target: staff.staffId, set: row }).run();
+    // The CSV seeds the counter on first insert, but it is runtime-owned from
+    // then on: commitments move it, and `createIris()` re-imports on every
+    // start. Updating it here would hand back every slot spent last session
+    // while the commitments ledger kept its rows.
+    const { currentFamiliesAssigned: _seed, ...updatable } = row;
+    db.insert(staff).values(row).onConflictDoUpdate({ target: staff.staffId, set: updatable }).run();
   }
 
   const rules = loadServiceRules();
