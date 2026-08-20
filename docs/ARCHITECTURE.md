@@ -133,6 +133,18 @@ offline-capable. The single act that spends a scarce slot is server-authoritativ
 **YORM has no npm release.** Vendor it as a git submodule at `vendor/yorm` and link
 `@yorm/*` through the workspace, mirroring YORM's own `examples/patient-collab-demo`.
 
+The submodule ships sources only, so the packages must be compiled once after cloning:
+
+```bash
+git submodule update --init
+pnpm install
+pnpm run yorm:build           # tsc -b across @yorm/*
+```
+
+Skip the build and `@yorm/*` resolves to nothing: `pnpm run typecheck` reports `TS2307` for
+every YORM import, and the test files that reach the database or the case documents fail to
+collect.
+
 ## Repository layout
 
 ```
