@@ -46,6 +46,7 @@ Full rationale, data model, commit protocol, and client architecture:
 ```bash
 git submodule update --init   # vendored YORM (no npm release)
 pnpm install
+pnpm run yorm:build           # compile the vendored YORM packages — @yorm/* won't resolve until this runs
 pnpm run mailpit              # Mailpit — SMTP :1025, UI :8025
 pnpm run db:import            # roster + service matrix → SQLite
 pnpm run seed                 # deliver the 30 referral emails
@@ -56,6 +57,7 @@ Then open http://localhost:5173 (the demo inbox is at http://localhost:8025).
 
 | Command | Purpose |
 |---|---|
+| `pnpm run yorm:build` | Compile the vendored YORM packages (needed once after cloning) |
 | `pnpm test` | Vitest unit and scenario suites |
 | `pnpm run test:e2e` | Playwright phone-viewport journey |
 | `pnpm run typecheck` | TypeScript, no emit |
